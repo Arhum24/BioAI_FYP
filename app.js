@@ -7,6 +7,7 @@ var cors = require('cors');
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
+var test = require('./Server/controllers/test');
 var Admin = require('./Server/controllers/AdminREST');
 var Auth = require('./Server/controllers/Auth');
 var User = require('./Server/controllers/usersREST');
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
+app.use('',test);
 app.use('/api/Admin', Admin);
 app.use('/api/auth', Auth);
 app.use('/api/auth', User);

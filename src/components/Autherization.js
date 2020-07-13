@@ -368,7 +368,7 @@ function Autherization(props) {
         console.log(data)
         let result = "";
         try {
-            await fetch("http://localhost:8000/api/auth/login", {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/login", {
                 method: 'POST',
 
                 body: new URLSearchParams({
@@ -410,7 +410,7 @@ function Autherization(props) {
         console.log(data)
         let result = "";
         try {
-            await fetch("http://localhost:8000/api/auth/register", {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/register", {
                 method: 'POST',
 
                 body: new URLSearchParams({
@@ -501,131 +501,131 @@ function Autherization(props) {
     var token = localStorage.getItem("token");
     // if (token) { return <Redirect to='/Dashboard' /> }
     // else
-        return (
-            <div className={classes.container}>
-                {/* <Header token={localStorage.getItem("token")} /> */}
-                <AppBar position="fixed" style={{ height: "4em" }}>  <Typography variant="title" style={{ marginTop: "1.1em", marginLeft: "1em" }} color="inherit">
-                    BioAI- Doctor Assistant
+    return (
+        <div className={classes.container}>
+            {/* <Header token={localStorage.getItem("token")} /> */}
+            <AppBar position="fixed" style={{ height: "4em" }}>  <Typography variant="title" style={{ marginTop: "1.1em", marginLeft: "1em" }} color="inherit">
+                BioAI- Doctor Assistant
           </Typography></AppBar>
 
-                <Typography className={classes.sideHeading}>Welcome to BioAI</Typography>
+            <Typography className={classes.sideHeading}>Welcome to BioAI</Typography>
 
 
 
-                {login ?
-                    <div className={classes.sideContentLogin}>
+            {login ?
+                <div className={classes.sideContentLogin}>
 
-                        <div style={{
-                            backgroudColor: "white", color: "white", display: "flex",
-                            flexDirection: "column", justifyContent: "center", marginTop: "15%", marginleft: "12%"
-                        }}>
+                    <div style={{
+                        backgroudColor: "white", color: "white", display: "flex",
+                        flexDirection: "column", justifyContent: "center", marginTop: "15%", marginleft: "12%"
+                    }}>
 
-                            <form style={{
-                                justifyContent: "center", display: "flex",
-                                flexDirection: "column", justifyContent: "center", textAlign: "center", marginLeft: "12%", paddingBottom: "15%"
+                        <form style={{
+                            justifyContent: "center", display: "flex",
+                            flexDirection: "column", justifyContent: "center", textAlign: "center", marginLeft: "12%", paddingBottom: "15%"
 
-                            }} noValidate autoComplete="off">
-                                <div style={{ display: "flex", flexDirection: "row" }}>
-                                    <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "10%" }} >SignIn</LockIcon>
-                                    <Typography style={{ color: "#5A75D6" }}>Sign in</Typography>
-                                </div>
-                                <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-17%", marginTop: "-7%" }}>{error_login}</Typography>
-                                <List>
-                                    <ListItem >
-                                        <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
-                                        <TextField className={classes.inputs} name="email_login" onChange={handleChange} id="standard-basic" label="Email" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange} name="password_login" type="password" label="Password" />
-                                    </ListItem>
+                        }} noValidate autoComplete="off">
+                            <div style={{ display: "flex", flexDirection: "row" }}>
+                                <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "10%" }} >SignIn</LockIcon>
+                                <Typography style={{ color: "#5A75D6" }}>Sign in</Typography>
+                            </div>
+                            <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-17%", marginTop: "-7%" }}>{error_login}</Typography>
+                            <List>
+                                <ListItem >
+                                    <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
+                                    <TextField className={classes.inputs} name="email_login" onChange={handleChange} id="standard-basic" label="Email" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange} name="password_login" type="password" label="Password" />
+                                </ListItem>
 
-                                </List>
+                            </List>
 
-                                <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        let result = Login();
-                                        result.then((data) => {
+                            <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    let result = Login();
+                                    result.then((data) => {
 
-                                            try {
-                                                localStorage.setItem("token", data.token)
+                                        try {
+                                            localStorage.setItem("token", data.token)
 
-                                                var token = localStorage.getItem("token")
-                                                console.log("Token Set : ", token)
+                                            var token = localStorage.getItem("token")
+                                            console.log("Token Set : ", token)
 
-                                                props.history.push("/Dashboard")
-                                            }
-                                            catch (error) {
-                                                setErrorLogin("Incorrect Email or Password");
+                                            props.history.push("/Dashboard")
+                                        }
+                                        catch (error) {
+                                            setErrorLogin("Incorrect Email or Password");
 
-                                            }
+                                        }
 
-                                        })
+                                    })
 
 
 
-                                    }}>
-                                    Confirm Login
+                                }}>
+                                Confirm Login
                                  </Button>
-                                <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Dont Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(false) }}>Sign up</Link></Typography>
-                            </form>
+                            <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Dont Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(false) }}>Sign up</Link></Typography>
+                        </form>
 
 
 
-                        </div> </div> : <div className={classes.sideContentSignup}>
+                    </div> </div> : <div className={classes.sideContentSignup}>
 
-                        <div style={{
-                            backgroudColor: "white", color: "white", display: "flex",
-                            flexDirection: "column", justifyContent: "center", marginTop: "8%", marginleft: "20%"
-                        }}>
+                    <div style={{
+                        backgroudColor: "white", color: "white", display: "flex",
+                        flexDirection: "column", justifyContent: "center", marginTop: "8%", marginleft: "20%"
+                    }}>
 
-                            <form style={{
-                                justifyContent: "center", display: "flex",
-                                flexDirection: "column", justifyContent: "center", textAlign: "center", marginleft: "20%", marginLeft: "15%", paddingBottom: "15%"
+                        <form style={{
+                            justifyContent: "center", display: "flex",
+                            flexDirection: "column", justifyContent: "center", textAlign: "center", marginleft: "20%", marginLeft: "15%", paddingBottom: "15%"
 
-                            }} noValidate autoComplete="off">
-                                <div style={{ display: "flex", flexDirection: "row" }}>
-                                    <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "5%" }} >SignIn</LockIcon>
-                                    <Typography style={{ color: "#5A75D6", marginLeft: "1%" }}>Sign Up</Typography>
-                                </div>
-                                <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-22%" }}>{error_register}</Typography>
-                                <List>
-                                    <ListItem >
-                                        <ListItemIcon><PersonIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
-                                        <TextField className={classes.inputs} id="standard-basic" onChange={handleChange2} name="name" label="Name" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="email" type="email" label="Email" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><PhoneIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="phone_number" type="number" label="Phone Number" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="password" type="password" label="Password" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><FingerprintIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="cnic" type="number" label="CNIC" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><InboxIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="licence" helperText="Please Enter Your Medical Licence Number" label="Licence No." />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><SchoolIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="qualification" helperText="Please Enter Your latest Medical Degree" label="Qualification" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><LocalHospitalIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="hospital" label="Hospital/Clinic" />
-                                    </ListItem>
-                                    <ListItem  >
-                                        <ListItemIcon><PublicIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                        {/* <FormControl className={classes.formControl}>
+                        }} noValidate autoComplete="off">
+                            <div style={{ display: "flex", flexDirection: "row" }}>
+                                <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "5%" }} >SignIn</LockIcon>
+                                <Typography style={{ color: "#5A75D6", marginLeft: "1%" }}>Sign Up</Typography>
+                            </div>
+                            <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-22%" }}>{error_register}</Typography>
+                            <List>
+                                <ListItem >
+                                    <ListItemIcon><PersonIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
+                                    <TextField className={classes.inputs} id="standard-basic" onChange={handleChange2} name="name" label="Name" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="email" type="email" label="Email" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><PhoneIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="phone_number" type="number" label="Phone Number" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="password" type="password" label="Password" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><FingerprintIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="cnic" type="number" label="CNIC" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><InboxIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="licence" helperText="Please Enter Your Medical Licence Number" label="Licence No." />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><SchoolIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="qualification" helperText="Please Enter Your latest Medical Degree" label="Qualification" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><LocalHospitalIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="hospital" label="Hospital/Clinic" />
+                                </ListItem>
+                                <ListItem  >
+                                    <ListItemIcon><PublicIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                    {/* <FormControl className={classes.formControl}>
                                             <InputLabel id="demo-mutiple-name-label">Medical Licence Country</InputLabel>
                                             <Select
                                                 label="Licence Country"
@@ -643,56 +643,56 @@ function Autherization(props) {
                                                 ))}
                                             </Select>
                                         </FormControl> */}
-                                        <Select
-                                            // classes={classes}
-                                            styles={customStyles}
-                                            options={names}
+                                    <Select
+                                        // classes={classes}
+                                        styles={customStyles}
+                                        options={names}
 
-                                            // components={components}
-                                            // value={licence_country}
-                                            onChange={(value) => { console.log(value); setLicenceCountry(value.value); console.log(licence_country) }}
-                                        // placeholder="Search a country"
-                                        // isClearable
-
-
-                                        />
-                                    </ListItem >
-
-                                </List>
-
-                                <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }} onClick={(e) => {
-                                    e.preventDefault();
-                                    let result = Register();
-                                    result.then((data) => {
-
-                                        if (data.auth === true) {
-                                            localStorage.setItem("token", data.token)
-                                            var token = localStorage.getItem("token")
-                                            console.log(token);
-                                            window.location.reload();
-                                            // props.history.push("/Dashboard")
-                                        }
-                                        else { setErrorRegister("Please Enter Correct Details"); }
-                                    })
+                                        // components={components}
+                                        // value={licence_country}
+                                        onChange={(value) => { console.log(value); setLicenceCountry(value.value); console.log(licence_country) }}
+                                    // placeholder="Search a country"
+                                    // isClearable
 
 
+                                    />
+                                </ListItem >
 
-                                }}>
-                                    Confirm Signup
+                            </List>
+
+                            <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }} onClick={(e) => {
+                                e.preventDefault();
+                                let result = Register();
+                                result.then((data) => {
+
+                                    if (data.auth === true) {
+                                        localStorage.setItem("token", data.token)
+                                        var token = localStorage.getItem("token")
+                                        console.log(token);
+                                        window.location.reload();
+                                        // props.history.push("/Dashboard")
+                                    }
+                                    else { setErrorRegister("Please Enter Correct Details"); }
+                                })
+
+
+
+                            }}>
+                                Confirm Signup
                                     </Button>
-                                <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Already Have Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(true) }}>Sign in</Link></Typography>
-                            </form>
+                            <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Already Have Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(true) }}>Sign in</Link></Typography>
+                        </form>
 
 
 
-                        </div> </div>}
+                    </div> </div>}
 
 
 
 
-            </div >
+        </div >
 
 
-        );
+    );
 }
 export default withRouter(Autherization);

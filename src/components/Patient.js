@@ -41,7 +41,7 @@ export default function Patient(props) {
         //     try {
 
 
-        //         await fetch("http://localhost:8000/api/auth/patient/patient/" + patient_id, {
+        //         await fetch("https://bioai-node.herokuapp.com/api/auth/patient/patient/" + patient_id, {
         //             method: 'GET',
         //             headers: {
         //                 'x-access-token': token, "Access-Control-Allow-Origin": "*",

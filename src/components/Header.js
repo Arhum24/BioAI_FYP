@@ -138,7 +138,7 @@ const Header = (props) => {
     async function fetchData() {
 
 
-      await fetch("http://localhost:8000/api/auth/userdata", {
+      await fetch("https://bioai-node.herokuapp.com/api/auth/userdata", {
         method: 'GET',
         headers: {
           'x-access-token': token, "Access-Control-Allow-Origin": "*",

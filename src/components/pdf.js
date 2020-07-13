@@ -95,7 +95,7 @@ export default class PDFShow extends Component {
             const Pid = this.props.location.passed.Patient_ID
             const Diagnosis_ID = this.props.location.passed.Diagnosis_ID
             console.log(Pid + "    " + Diagnosis_ID + "      " + tok)
-            await fetch('http://localhost:8000/api/auth/diagnose/' + Diagnosis_ID,
+            await fetch('https://bioai-node.herokuapp.com/api/auth/diagnose/' + Diagnosis_ID,
                 {
                     method: 'GET',
                     headers: {
@@ -119,7 +119,7 @@ export default class PDFShow extends Component {
                         Symptoms: response.Symptoms
                     });
                     // Fetch Patient data
-                    fetch('http://localhost:8000/api/auth/patients/' + Pid,
+                    fetch('https://bioai-node.herokuapp.com/api/auth/patients/' + Pid,
                         {
                             method: 'GET',
                             headers: {

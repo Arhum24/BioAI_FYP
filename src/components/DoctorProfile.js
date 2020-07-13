@@ -254,7 +254,7 @@ export default function DoctorProfile(props) {
 
         let result = "";
         try {
-            await fetch("http://localhost:8000/api/auth/user/" + profile._id, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/user/" + profile._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',

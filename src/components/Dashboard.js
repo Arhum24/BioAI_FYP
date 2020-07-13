@@ -42,7 +42,7 @@ export default function Dashboard(props) {
       const doct_id = profile._id
       try {
 
-        await fetch("http://localhost:8000/api/WeekAppointment/" + doct_id, {
+        await fetch("https://bioai-node.herokuapp.com/api/WeekAppointment/" + doct_id, {
           method: 'GET',
           headers: {
             'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -65,7 +65,7 @@ export default function Dashboard(props) {
       }
 
       try {
-        await fetch("http://localhost:8000/api/firstPatients/" + doct_id, {
+        await fetch("https://bioai-node.herokuapp.com/api/firstPatients/" + doct_id, {
           method: 'GET',
           headers: {
             'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -88,7 +88,7 @@ export default function Dashboard(props) {
       }
 
       try {
-        await fetch("http://localhost:8000/api/allAppointments/" + doct_id, {
+        await fetch("https://bioai-node.herokuapp.com/api/allAppointments/" + doct_id, {
           method: 'GET',
           headers: {
             'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -114,7 +114,7 @@ export default function Dashboard(props) {
 
 
 
-      await fetch("http://localhost:8000/api/allPatients/" + doct_id, {
+      await fetch("https://bioai-node.herokuapp.com/api/allPatients/" + doct_id, {
         method: 'GET',
         headers: {
           'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -133,7 +133,7 @@ export default function Dashboard(props) {
 
       })
 
-      await fetch("http://localhost:8000/api/graphDate/" + doct_id, {
+      await fetch("https://bioai-node.herokuapp.com/api/graphDate/" + doct_id, {
         method: 'GET',
         headers: {
           'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -170,7 +170,7 @@ export default function Dashboard(props) {
       })
 
 
-      await fetch("http://localhost:8000/api/graphDisease", {
+      await fetch("https://bioai-node.herokuapp.com/api/graphDisease", {
         method: 'GET',
         headers: {
           'x-access-token': token, "Access-Control-Allow-Origin": "*",

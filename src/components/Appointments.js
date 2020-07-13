@@ -150,7 +150,7 @@ export default function Appointments() {
             const doct_id = profile._id;
             const toDate = moment().toISOString();
             const token = localStorage.getItem("token");
-            await fetch("http://localhost:8000/api/auth/appointment/" + doct_id + "/" + toDate, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + doct_id + "/" + toDate, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -176,7 +176,7 @@ export default function Appointments() {
         const toDate = date;
         const token = localStorage.getItem("token");
         async function fetchData() {
-            await fetch("http://localhost:8000/api/auth/appointment/" + doct_id + "/" + toDate, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + doct_id + "/" + toDate, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -205,7 +205,7 @@ export default function Appointments() {
         const token = localStorage.getItem("token");
         console.log(doct_id + " " + token)
         async function insertData() {
-            await fetch("http://localhost:8000/api/auth/appointment", {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -240,7 +240,7 @@ export default function Appointments() {
         const token = localStorage.getItem("token");
 
         async function updateData() {
-            await fetch("http://localhost:8000/api/auth/appointment/" + EditID, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + EditID, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -274,7 +274,7 @@ export default function Appointments() {
         const token = localStorage.getItem("token");
 
         async function deleteData() {
-            await fetch("http://localhost:8000/api/auth/appointment/" + DeleteID, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + DeleteID, {
                 method: 'Delete',
                 headers: {
                     'Accept': 'application/json',

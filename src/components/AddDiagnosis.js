@@ -111,7 +111,7 @@ export default function AddDiagnosis(props) {
             const doct_id = profile._id
             let result = "";
             try {
-                await fetch("http://localhost:8000/api/auth/diagnosis", {
+                await fetch("https://bioai-node.herokuapp.com/api/auth/diagnosis", {
                     method: 'POST',
 
                     body: JSON.stringify({

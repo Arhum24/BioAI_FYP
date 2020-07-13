@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>React App</title>
+  <style>
+    p {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .MuiIconButton-root {
+      color: "#5A75D6"
+
+
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      padding-left: 1em;
+      text-indent: -.7em;
+      list-style: none;
+    }
+
+    li::before {
+      content: "";
+      color: green;
+
+      /* or whatever color you prefer */
+    }
+
+    .MedicalInfo table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+
+    }
+
+    .MedicalInfo table th,
+    .MedicalInfo td {
+      text-align: left;
+      padding: 16px;
+
+    }
+
+    .MedicalInfo tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .MedicalInfo tr:last-child {
+
+      background-color: white;
+      border: none;
+
+    }
+
+    .MedicalInfo table tr {
+      border: solid;
+      border-width: 0.1rem 0.1rem 0.1rem 0.1rem;
+      border-color: #ddd;
+    }
+
+
+    .Profile {
+
+      margin-top: 7.9rem;
+    }
+
+    .Profile table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      border: 0px solid black;
+
+    }
+
+    .Profile table th,
+    .Profile td {
+      text-align: left;
+      padding: 16px;
+
+    }
+
+    .Profile table td {
+      border: 4px;
+      padding: 16px;
+    }
+
+    .Profile table tr {
+      border: solid;
+      border-width: 0.1rem 0.1rem 0.1rem 0.1rem;
+      border-color: #4D5365;
+    }
+
+
+    .Profile tr:first-child {
+      border-top: none;
+
+
+    }
+
+    .Profile {
+
+      overflow-x: auto
+    }
+
+    .Profile tr:last-child {
+      border-top: 0.1rem;
+      border-bottom: none;
+      border-left: none;
+    }
+
+    .row_head {
+
+      font-weight: bold;
+
+    }
+
+    /* .Profile tr:nth-child(even) {
+      background-color: #f2f2f2;
+    } */
+
+    .Calendar {
+      border-collapse: collapse;
+      padding: 0;
+      margin: 0;
+      background: #fff;
+      position: 0;
+
+
+    }
+
+    .Calendar .DayOfWeek {
+
+      height: 2.1rem;
+      background-color: #5A75D6;
+      color: white;
+    }
+
+    .Calendar .month-header {
+      border-bottom: 0.1px solid white;
+      height: 3.2rem;
+      color: white;
+    }
+
+
+
+    .Calendar .nav .nav-inner {
+      cursor: pointer;
+      border: 0;
+      padding: 0;
+      background: none transparent;
+      color: white;
+
+    }
+
+    .Calendar .Day {
+      cursor: pointer;
+    }
+
+    .Calendar .Day .Day-inner {
+      background: none transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-block;
+      padding: 0;
+
+    }
+
+    .Calendar .Day button.Day-inner {
+      border: 0;
+    }
+
+    .Calendar .Day a.Day-inner {
+      color: inherit;
+    }
+
+    /* .Calendar .Day.weekend {
+      background: #52626d;
+      color: white;
+    } */
+
+
+
+    .Calendar .Day.other-month button {
+      color: #999;
+      font-style: italic;
+
+    }
+
+
+
+
+    .Calendar .Day.today .Day-inner {
+      background: #5A75D6;
+      color: white;
+    }
+
+    .Calendar .Day:hover .Day-inner {
+      background: #eee;
+      color: #000;
+    }
+
+    .Calendar .Day.selected .Day-inner {
+      background: green;
+      color: white;
+    }
+
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
+      .Calendar {
+        width: 2em;
+
+        height: 10rem;
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .15rem;
+        text-align: center;
+
+      }
+
+      .Calendar .Day .Day-inner {
+        height: 1.2rem;
+        line-height: 1.2rem;
+        width: 1.2rem;
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+        padding: .02rem 0.1rem;
+
+      }
+    }
+
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) and (max-width: 768px) {
+      .Calendar {
+        width: 2em;
+        background-color: white;
+        height: 5rem;
+      }
+
+      .Calendar .Day .Day-inner {
+
+        height: 2.5rem;
+        line-height: 2.5rem;
+        width: 1.8rem;
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .10rem;
+        text-align: center;
+
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+        padding: .001rem 0.01rem;
+      }
+    }
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) and (max-width:992px) {
+      .Calendar {
+        width: 2;
+        background-color: white;
+        height: 10rem;
+
+      }
+
+      .Calendar .Day .Day-inner {
+
+        height: 2.5rem;
+        line-height: 2.5rem;
+        width: 2.5rem;
+
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .15rem;
+        text-align: center;
+
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+
+        padding: .075rem 0.75rem;
+
+      }
+    }
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 1152px) and (max-width: 1380px) {
+      .Calendar {
+        width: 2em;
+        background-color: white;
+        /* height: 10rem; */
+      }
+
+      .Calendar .Day .Day-inner {
+
+        height: 3.5rem;
+        line-height: 3.5rem;
+        width: 3.5rem;
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .65rem;
+        text-align: center;
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+        padding: .1rem 1rem;
+      }
+    }
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) and (max-width: 1152px) {
+      .Calendar {
+        width: 2em;
+        background-color: white;
+        /* height: 10rem; */
+      }
+
+      .Calendar .Day .Day-inner {
+
+        height: 3.0rem;
+        line-height: 3.0rem;
+        width: 3.0rem;
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .37rem;
+        text-align: center;
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+        padding: .1rem 1rem;
+      }
+    }
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1380px) and (max-width: 1830px) {
+      .Calendar {
+        width: 41em;
+        background-color: white;
+        height: 11rem;
+      }
+
+      .Calendar .Day .Day-inner {
+
+        height: 2.5rem;
+        line-height: 2.5rem;
+        width: 2.5rem;
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .25rem;
+        text-align: center;
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+        padding: .1rem 1rem;
+      }
+
+
+    }
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1830px) {
+      .Calendar {
+        width: 53em;
+        background-color: white;
+        height: 11rem;
+      }
+
+      .Calendar .Day .Day-inner {
+
+        height: 5.5rem;
+        line-height: 5.5rem;
+        width: 5.5rem;
+      }
+
+      .Calendar th,
+      .Calendar td {
+        padding: .25rem;
+        text-align: center;
+      }
+
+      .Calendar th {
+        background: #5A75D6;
+        padding: .1rem 1rem;
+      }
+
+      .Calendar .Day.weekend {
+        /* background: rgb(250, 252, 253); */
+      }
+
+      .Calendar .Day.weekend button {
+
+        color: rgb(245, 108, 108);
+      }
+    }
+  </style>
+</head>
+
+<body style="background-color: #F0F0F0" ,>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+</body>
+
+</html>

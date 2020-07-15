@@ -1,1 +1,1 @@
-web: gunicorn BioAI_FYO.wsgi
+web: gunicorn BioAI_FYP.wsgi

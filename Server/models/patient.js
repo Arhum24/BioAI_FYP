@@ -17,20 +17,22 @@ var PatientSchema = new Schema(
         },
         Height:{
             type:Number,
-            required:true,
+            // required:true,
             max:300
         },
         Weight:{
             type:Number,
-            required:true,
+            // required:true,
             max:900
         },
         Gender:{
             type:String,
+            required:true,
             max:25
         },
         Maritial_Status:{
             type:String,
+            required:true,
             max:25
         },
         Blood_Group:
@@ -57,10 +59,9 @@ var PatientSchema = new Schema(
         },
         Email:{
             type:mongoose.SchemaTypes.Email,
-            required:true,
-            unique:true,
+            // required:true,
+            // unique:true,
             max:255,
-            // default:"123@12345.com"
         },
         CNIC:{
             type:Number,
@@ -71,6 +72,7 @@ var PatientSchema = new Schema(
         Phone_Number:{
             type:String,
             required:true,
+            
             min:9,
             max:17
 

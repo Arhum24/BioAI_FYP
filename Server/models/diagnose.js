@@ -24,10 +24,11 @@ var DiagnoseSchema = new Schema(
             type:[String]
         },
         Medicine_Notes:{
-            type:[String]
+            type:String
         },
         Symptoms:{
-            type:[String]
+            type:[String],
+            
         },
         Findings:{
             type:[String]

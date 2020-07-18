@@ -114,7 +114,7 @@ router.post('/patient', [VerifyToken, Permissions], (req, res) => {
 
 
     patient.save(function (error, results) {
-        if (error) res.json(error);
+        if (error) res.status(500).json({error:error,Message:error.message});
         console.log('Patient Successfully Added.');
         res.json(results);
     });
@@ -161,7 +161,7 @@ router.put('/patient/:id', [VerifyToken, Permissions], (req, res) => {
             // DateReg : req.body.DateReg
         },
         function (err, result) {
-            if (err) res.json(err);
+            if (err) res.status(500).json({error:err,Message:err.message});
             res.json(result);
             console.log('Patient Updated.');
         });

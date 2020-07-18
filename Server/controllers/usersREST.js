@@ -141,7 +141,7 @@ router.put('/user/:id', [VerifyToken, Permissions], (req, res) => {
             // image: req.body.image,
         },
         function (err, result) {
-            if (err) res.json(err);
+            if (err) res.status(500).json({error:err,Message:err.message});
             res.json(result);
             console.log('User Info Updated.');
         });

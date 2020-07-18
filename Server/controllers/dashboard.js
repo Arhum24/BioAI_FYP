@@ -341,22 +341,24 @@ try {
         const today = moment().isoWeek();
         console.log(today);
         console.log("In weekly appointment route we have "+req.params.Did)
+        console.log("Current Week is ",today)
+
         // const from_date = today.startOf('week');
         // const to_date = today.endOf('week');
         appoi.aggregate([
             {
-                $match:
-                {
-                    
+                $match: {
                     Doctor_ID : req.params.Did
+                    }
+                    
                 }
-            },
+            ,
             {
                 $project:
                 {
                     "week": { $isoWeek: '$DateAppoi' }
                     ,
-                    // Doctor_ID : req.params.Did
+                    Doctor_ID : req.params.Did
                 }
             },
             {
@@ -378,19 +380,29 @@ try {
             }
 
         ]).exec((err, result) => {
+            console.log("Error OR Result = ",result,err)
             console.log(result.length)
             if (err) {
+                console.log("Error = ")
+                console.log(err);
                 console.log(err);
             }
             if(result.length===0){
+                console.log("Result with 0 length = ")
+                console.log(result);
                 res.json([{count:0}])
             }
             else {
                 res.json(result);
+                console.log("Result = ")
                 console.log(result);
             }
         }
         )
+
+
+
+        
         // appoi.aggregate(
         //     [
         //         {

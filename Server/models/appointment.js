@@ -22,10 +22,12 @@ var AppointmentSchema = new Schema(
             max:255
         },
         Phone_Number:{
-            type:Number
+            type:Number,
+            required:true
         },
         DateAppoi:{
-            type:Date
+            type:Date,
+            required:true
         }
         // ,
         // Time:{

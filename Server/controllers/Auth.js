@@ -55,7 +55,7 @@ router.post('/register', Permissions, function (req, res) {
     image : req.body.image,
   },
     function (err, user) {
-      if (err) return res.status(500).send(err)
+      if (err) return res.status(500).send({error:err,Message:err.message})
       // create a token
       var token = jwt.sign({ id: user._id }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
@@ -84,11 +84,11 @@ router.post('/login', Permissions, function (req, res) {
       email: req.body.email
     },
     function (err, user) {
-      if (err) return res.status(500).send('Error on the server.');
-      if (!user) return res.status(404).send('No user found.');
+      if (err) return res.status(500).send({error:"Server Error"});
+      if (!user) return res.status(404).send({Message:"No User Found"});
       if(user.active == true){
       var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-      if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+      if (!passwordIsValid) return res.status(401).send({ auth: false, token: null,Message:"Wrong Password" });
 
       var token = jwt.sign({ id: user._id }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
@@ -97,7 +97,7 @@ router.post('/login', Permissions, function (req, res) {
       res.status(200).send({ auth: true, token: token });
       }
       else{
-        res.send({Message: "This User is Not-Active, Please Contact Admin"})
+        res.send({blocked:true,Message: "User blocked for providing wrong information"})
       }
     });
 

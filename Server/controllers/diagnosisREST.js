@@ -92,7 +92,7 @@ router.get('/diagnosis/:Did', [VerifyToken, Permissions], (req, res) => {
 // Add Diagnosis
 router.post('/diagnosis', [VerifyToken, Permissions], (req, res) => {
     var dia = new diagnose();
-
+    console.log(req.body.Medicine_Notes);
     dia.Patient_ID = req.body.Patient_ID;
     dia.Doctor_ID = req.body.Doctor_ID;
     dia.Tests = req.body.Tests;
@@ -110,7 +110,7 @@ router.post('/diagnosis', [VerifyToken, Permissions], (req, res) => {
 
 
     dia.save(function (error, results) {
-        if (error) res.json(error);
+        if (error) res.status(500).json({error:error,Message:error.message});
         console.log('Diagnosis Successfully Added.');
         res.json(results);
     });
@@ -165,7 +165,7 @@ router.put('/diagnosis/:id', [VerifyToken, Permissions], (req, res) => {
             Image : req.body.Image
         },
         function (err, result) {
-            if (err) res.json(err);
+            if (err) res.status(500).json({error:err,Message:err.message});
             res.json(result);
             console.log('Diagnose Info Updated.');
         });

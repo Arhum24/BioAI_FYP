@@ -51,7 +51,7 @@ var Permissions = function (req, res, next) {
 router.get('/allappointment/:id', [VerifyToken, Permissions], (req, res) => {
     appointment.find({
         Doctor_ID: req.params.id
-    })
+    }).sort({DateAppoi: 'descending'})
         .exec(function (error, results) {
             if (error) {
                 res.json(error);
@@ -117,7 +117,7 @@ router.post('/appointment', [VerifyToken, Permissions], (req, res) => {
 
 
     appoi.save(function (error, results) {
-        if (error) res.json(error);
+        if (error) res.status(500).json({error:error,Message:error.message});
         console.log('Appointment Successfully Added.');
         res.json(results);
     });
@@ -130,7 +130,7 @@ router.delete('/appointment/:id', [VerifyToken, Permissions], (req, res) => {
             _id: req.params.id
         },
         (err, result) => {
-            if (err) return res.send(500, err)
+            if (err) return res.status(500).json({error:err,Message:err.message})
             res.json(result);
             console.log('Appointment Deleted');
         });
@@ -150,7 +150,7 @@ router.put('/appointment/:id', [VerifyToken, Permissions], (req, res) => {
             DateAppoi : req.body.DateAppoi
         },
         function (err, result) {
-            if (err) res.json(err);
+            if (err) res.status(500).json({error:err,Message:err.message});
             res.json(result);
             console.log('Appointment Updated.');
             

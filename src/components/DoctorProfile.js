@@ -261,7 +261,7 @@ export default function DoctorProfile(props) {
 
         let result = "";
         try {
-            await fetch("http://localhost:8000/api/auth/user/" + profile._id, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/user/" + profile._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -291,7 +291,7 @@ export default function DoctorProfile(props) {
                     async function fetchData() {
 
                         const token = localStorage.getItem("token");
-                        await fetch("http://localhost:8000/api/auth/userdata", {
+                        await fetch("https://bioai-node.herokuapp.com/api/auth/userdata", {
                             method: 'GET',
                             headers: {
                                 'x-access-token': token, "Access-Control-Allow-Origin": "*",

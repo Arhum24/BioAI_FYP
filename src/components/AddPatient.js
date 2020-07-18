@@ -124,7 +124,7 @@ export default function AddPatient(props) {
 
         let result = "";
         try {
-          await fetch("http://localhost:8000/api/auth/patient", {
+          await fetch("https://bioai-node.herokuapp.com/api/auth/patient", {
             method: 'POST',
 
             body: new URLSearchParams({

@@ -389,7 +389,7 @@ function Autherization(props) {
 
         let result = "";
         try {
-            await fetch("http://localhost:8000/api/auth/login", {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/login", {
                 method: 'POST',
 
                 body: new URLSearchParams({
@@ -418,7 +418,7 @@ function Autherization(props) {
                         async function fetchData() {
 
                             const token = localStorage.getItem("token");
-                            await fetch("http://localhost:8000/api/auth/userdata", {
+                            await fetch("https://bioai-node.herokuapp.com/api/auth/userdata", {
                                 method: 'GET',
                                 headers: {
                                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -520,7 +520,7 @@ function Autherization(props) {
         if (email != "" && password != "" && cnic != "" && licence != "" && licence_country != "" && name != "" && qualification != "" && phone_number != "" && hospital != "") {
             let result = { auth: true };
             try {
-                await fetch("http://localhost:8000/api/auth/register", {
+                await fetch("https://bioai-node.herokuapp.com/api/auth/register", {
                     method: 'POST',
 
                     body: new URLSearchParams({

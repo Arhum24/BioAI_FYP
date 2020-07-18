@@ -22,6 +22,8 @@ import TimePicker from 'react-time-picker';
 import DatePicker from 'react-date-picker';
 import Slide from '@material-ui/core/Slide';
 import Header from './Header';
+import { Link } from "react-router-dom";
+import { Message } from 'shineout'
 import {
     Table,
     TableBody,
@@ -63,7 +65,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        backgroundColor: "#5A75D6",
+        backgroundColor: "#37ACEB",
         color: theme.palette.common.white,
     },
     body: {
@@ -133,6 +135,12 @@ export default function Appointments() {
     const [DeleteID, setDeleteID] = React.useState("");
     const [EditDoctor_ID, setEditDoctor_ID] = React.useState("");
     const [openDelete, setOpenDelete] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [successMessage, setSuccessMessage] = React.useState("");
+    const [failure, setFailure] = React.useState(false);
+
+    const [successEdit, setSuccessEdit] = React.useState("");
+    const [failureEdit, setFailureEdit] = React.useState(false);
 
     const handleDeleteClickOpen = (row) => {
         setDeleteID(row._id)
@@ -145,12 +153,14 @@ export default function Appointments() {
     };
 
     React.useEffect(() => {
+        setSuccess(false);
+        setFailure(false);
         const fetchData = async () => {
             const profile = JSON.parse(localStorage.getItem('profile'));
             const doct_id = profile._id;
             const toDate = moment().toISOString();
             const token = localStorage.getItem("token");
-            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + doct_id + "/" + toDate, {
+            await fetch("http://localhost:8000/api/auth/appointment/" + doct_id + "/" + toDate, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -176,7 +186,7 @@ export default function Appointments() {
         const toDate = date;
         const token = localStorage.getItem("token");
         async function fetchData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + doct_id + "/" + toDate, {
+            await fetch("http://localhost:8000/api/auth/appointment/" + doct_id + "/" + toDate, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -205,30 +215,49 @@ export default function Appointments() {
         const token = localStorage.getItem("token");
         console.log(doct_id + " " + token)
         async function insertData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment", {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'x-access-token': token,
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify({
-                    Doctor_ID: doct_id,
-                    Name: Name,
-                    Email: Email,
-                    Phone_Number: Phone_Number,
-                    DateAppoi: new Date(DateAppoi).toISOString()
 
-                }),
+            try {
+                await fetch("http://localhost:8000/api/auth/appointment", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'x-access-token': token,
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify({
+                        Doctor_ID: doct_id,
+                        Name: Name,
+                        Email: Email,
+                        Phone_Number: Phone_Number,
+                        DateAppoi: new Date(DateAppoi).toISOString()
 
-            }).then((response) => response.json()).then((data) => {
-                console.log(Object.keys(data))
+                    }),
+
+                }).then((response) => response.json()).then((data) => {
+                    console.log(Object.keys(data))
+                    console.log("Appointment Add", data)
+                    if (!data.error) {
+                        setSuccess(true);
+                        // setSuccessMessage("Appointment have been scheduled successfully");
+                    } else {
+
+                        setFailure(true);
+                        setFailure(false);
+                    }
 
 
-            })
+                })
+            } catch (err) {
+                setFailure(true);
+                setFailure(false);
+
+            }
+            setSuccess(false);
+
         }
         insertData();
+
         setForceUpdate(forceUpdate + 1)
 
 
@@ -240,28 +269,47 @@ export default function Appointments() {
         const token = localStorage.getItem("token");
 
         async function updateData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + EditID, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'x-access-token': token,
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify({
-                    Doctor_ID: EditDoctor_ID,
-                    Name: NameEdit,
-                    Email: EmailEdit,
-                    Phone_Number: Phone_NumberEdit,
-                    DateAppoi: new Date(DateAppoiEdit).toISOString()
 
-                }),
+            try {
+                await fetch("http://localhost:8000/api/auth/appointment/" + EditID, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'x-access-token': token,
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify({
+                        Doctor_ID: EditDoctor_ID,
+                        Name: NameEdit,
+                        Email: EmailEdit,
+                        Phone_Number: Phone_NumberEdit,
+                        DateAppoi: new Date(DateAppoiEdit).toISOString()
 
-            }).then((response) => response.json()).then((data) => {
-                console.log(Object.keys(data))
+                    }),
+
+                }).then((response) => response.json()).then((data) => {
+                    console.log(Object.keys(data))
+                    if (!data.error) {
+                        setSuccessEdit(true);
+                        setSuccessEdit(false);
+                        // setSuccessMessage("Appointment have been scheduled successfully");
+                    } else {
+
+                        setFailureEdit(true);
+                        setFailureEdit(false);
+                    }
 
 
-            })
+
+                })
+            } catch (err) {
+                setFailureEdit(true);
+                setFailureEdit(false);
+
+            }
+
+
         }
         updateData();
         setForceUpdate(forceUpdate + 1)
@@ -274,7 +322,8 @@ export default function Appointments() {
         const token = localStorage.getItem("token");
 
         async function deleteData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/appointment/" + DeleteID, {
+
+            await fetch("http://localhost:8000/api/auth/appointment/" + DeleteID, {
                 method: 'Delete',
                 headers: {
                     'Accept': 'application/json',
@@ -399,15 +448,29 @@ export default function Appointments() {
     else
         return (
             <div className={classes.container}>
+
+                {success ? Message.success(<div style={{ width: 350 }}>Appointment have been scheduled successfully</div>, 2, {
+                    position: "bottom-right",
+                    title: 'Sucessfully Scheduled',
+                }) : failure && Message.warn(<div style={{ width: 320 }}>Make Sure you entered correct data</div>, 2, {
+                    position: "bottom-right",
+                    title: 'Unsuccesfull',
+                })}
+
+                {successEdit ? Message.success(<div style={{ width: 350 }}>Appointment have been edited successfully</div>, 2, {
+                    position: "bottom-right",
+                    title: 'Sucessfully Edited',
+                }) : failureEdit && Message.warn(<div style={{ width: 320 }}>Make Sure you entered correct data</div>, 2, {
+                    position: "bottom-right",
+                    title: 'Unsuccesfull',
+                })}
                 <Header token={localStorage.getItem("token")} />
                 <div className={classes.upperTop}>
                     <Typography className={classes.heading}>Appointments</Typography>
                     <Button
                         variant="contained"
-                        style={{ backgroundColor: "#5A75D6", color: "white", fontSize: 11 }}
-                        onClick={() => {
-                            alert("Back");
-                        }}
+                        style={{ backgroundColor: "#37ACEB", color: "white", fontSize: 11 }}
+                        component={Link} to="/Dashboard"
                     >
                         <ArrowBackIcon />
                     Back
@@ -451,7 +514,7 @@ export default function Appointments() {
                                     </DialogActions>
                                 </Dialog>
                                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                                    <DialogTitle id="form-dialog-title">Add New Appointment</DialogTitle>
+                                    <DialogTitle id="form-dialog-title" style={{ background: "linear-gradient(to right, #38D4D7, #37ACEB)", color: "white" }}>Add New Appointment</DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
                                             Enter the details for new Appointment
@@ -509,7 +572,7 @@ export default function Appointments() {
                                     </DialogContent>
                                     <DialogActions>
                                         <Button
-                                            onClick={handleClose} color="primary">
+                                            onClick={handleClose} color="secondary">
 
                                             Cancel
           </Button>
@@ -524,7 +587,7 @@ export default function Appointments() {
 
 
                                 <Dialog open={openEdit} onClose={handleEditClose} aria-labelledby="form-dialog-title">
-                                    <DialogTitle style={{ backgroundColor: "green", color: "white" }} id="form-dialog-title">Edit Appointment <EditIcon style={{ marginLeft: "25%" }} /></DialogTitle>
+                                    <DialogTitle id="form-dialog-title" style={{ background: "linear-gradient(to right, #38D4D7, #37ACEB)", color: "white" }}>Edit Appointment <EditIcon style={{ marginLeft: "25%" }} /></DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
                                             Enter the details to Edit Appointment
@@ -589,7 +652,7 @@ export default function Appointments() {
                                     </DialogContent>
                                     <DialogActions>
                                         <Button
-                                            onClick={handleEditClose} color="primary">
+                                            onClick={handleEditClose} color="secondary">
 
                                             Cancel
           </Button>
@@ -607,7 +670,7 @@ export default function Appointments() {
                         <Grid item xs={6}>
 
                             <Paper className={classes.top_paper}>
-                                <Typography style={{ float: "left", color: "#3366CC" }}>Appointments for {moment(date).format("DD/MM/YYYY").toLocaleString()}</Typography>
+                                <Typography style={{ float: "left", color: "#37ACEB" }}>Appointments for {moment(date).format("DD/MM/YYYY").toLocaleString()}</Typography>
                                 <TableContainer className={classes.container2}>
                                     <Table className={classes.table} stickyHeader aria-label="sticky table">
                                         <TableHead>
@@ -624,6 +687,13 @@ export default function Appointments() {
                                             </StyledTableRow>
                                         </TableHead>
                                         <TableBody>
+                                            {(() => {
+                                                if (rows.length < 1) {
+                                                    return (
+                                                        <p style={{ marginLeft: "180%", marginTop: 30, marginBottom: 30, width: "100%" }}>No Appointments Scheduled</p>
+                                                    )
+                                                }
+                                            })()}
                                             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).
                                                 map(row => {
 
@@ -638,7 +708,7 @@ export default function Appointments() {
                                                                 {moment(row.DateAppoi).format("dddd, MMMM D, Y")}
                                                             </StyledTableCell>
                                                             <StyledTableCell align="left" >
-                                                                {moment(row.DateAppoi).format("hh:mm")}
+                                                                {moment(row.DateAppoi).format("hh:mm A")}
                                                             </StyledTableCell>
                                                             <StyledTableCell align="left" >
                                                                 {row.Phone_Number}
@@ -684,7 +754,7 @@ let dayClasses = function (date) {
 const useStyles = makeStyles(theme => ({
 
     AddAppointmet: {
-        backgroundColor: "#5A75D6",
+        backgroundColor: "#37ACEB",
         position: "relative",
         color: "white",
         left: "98%",

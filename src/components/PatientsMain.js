@@ -15,7 +15,7 @@ import { Redirect } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
 
     AddPatient: {
-        backgroundColor: "#5A75D6",
+        backgroundColor: "#38D4D7",
         position: "relative",
         color: "white",
         left: "88%",
@@ -67,8 +67,10 @@ const useStyles = makeStyles(theme => ({
 }));
 const columns = [
     { id: "PatientName", label: "Patient Name", minWidth: 100 },
+    { id: "PatientCNIC", label: "CNIC", minWidth: 100 },
     { id: "PatientPhone", label: "Phone Number", minWidth: 170 },
     { id: "PatientDOB", label: "Date of Birth", minWidth: 100 },
+
 
 ];
 function PatientsMain(props) {
@@ -98,7 +100,7 @@ function PatientsMain(props) {
         const doct_id = profile._id
 
         async function fetchData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/patient/" + doct_id, {
+            await fetch("http://localhost:8000/api/auth/patient/" + doct_id, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -139,7 +141,7 @@ function PatientsMain(props) {
         }
     };
 
-    if (!localStorage.getItem("token")) { return <Redirect to='/Autherization' /> }
+    if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false) { return <Redirect to='/Autherization' /> }
     else
         return (
 
@@ -159,7 +161,7 @@ function PatientsMain(props) {
           </Button> */}
                 {/* `/ideas/${ this.props.testValue }` */}
                 <ListItemLink to={{ pathname: "/AddPatient", passed: { name: "Umair Awan" } }} variant="contained" text="Add Patient" icon={<AddIcon />} classes={classes} className={classes.AddPatient} doctor="Umair Doctor" />
-                <Typography style={{ marginLeft: "3rem", textAlign: "left", fontWeight: "bold", color: "gray" }}>Patients</Typography>
+                <Typography style={{ marginLeft: "3.5rem", textAlign: "left", fontWeight: "bold", color: "gray", fontSize: 15 }}>Patients</Typography>
                 <PatientList
                     rows={rows}
                     columns={columns}

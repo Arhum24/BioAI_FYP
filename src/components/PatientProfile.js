@@ -12,6 +12,7 @@ import Patient from "./Patient";
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { Message } from 'shineout'
 const PatientProfile = (props) => {
     const [openEditPersonal, setOpenEditPersonal] = useState(false);
     const [toEditPatientName, setEditName] = useState(null);
@@ -23,8 +24,12 @@ const PatientProfile = (props) => {
     const [toEditPatientAddress, setEditAddress] = useState(null);
     const [patient, setPatient] = useState(props.patient);
     const [openSnack, setOpenSnack] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
+    const [failureMessage, setFailureMessage] = React.useState("");
     useEffect(() => {
-
+        setSuccess(false);
+        setFailure(false);
         setPatient(props.patient);
         setEditName(patient.Name);
         setEditPhone(patient.Phone_Number);
@@ -65,7 +70,7 @@ const PatientProfile = (props) => {
     };
     const LightTooltip = withStyles((theme) => ({
         tooltip: {
-            backgroundColor: "#5A75D6",
+            backgroundColor: "#38D4D7",
             color: 'white',
             boxShadow: theme.shadows[1],
             fontSize: 11,
@@ -111,12 +116,23 @@ const PatientProfile = (props) => {
                 }).then((response) => response.json()).then((data) => {
                     result = data
                     console.log(data)
+                    if (!data.error) {
+
+                        setSuccess(true);
+                        props.history.push('/PatientsMain')
+
+                    } else {
+
+                        setFailureMessage("Unsuccessful Edit. Make sure you have entered correct data.")
+                        setFailure(true);
+                    }
 
                 })
                 return result
 
             } catch (err) {
-
+                setFailureMessage("Server Error")
+                setFailure(true);
                 return err
             }
 
@@ -126,24 +142,35 @@ const PatientProfile = (props) => {
         var a = putPatient();
         console.log("-*-***-**-*--*-");
         console.log(a);
-        handleSnackClick();
-        props.history.push('/PatientsMain')
+        // handleSnackClick();
+
         setOpenEditPersonal(false);
 
     }
 
     const StyledEditButton = withStyles((theme) => ({
         root: {
-            backgroundColor: "#5A75D6",
+            background: "linear-gradient(to right,  #37ACEB,#38D4D7)",
             color: theme.palette.common.white,
+
             '&:hover': {
-                backgroundColor: "#4D5365"
+                background: "linear-gradient(to right, #38D4D7,#37ACEB)"
 
             }
+
+
         },
     }))(Button);
     return (
         <div style={{}} >
+
+            {success ? Message.success(<div style={{ width: 240 }}>Patient Profile Edited Successfully</div>, 8, {
+                position: "bottom-right",
+                title: 'Sucessfully Added',
+            }) : failure && Message.warn(<div style={{ width: 240 }}>{failureMessage}</div>, 0, {
+                position: "bottom-right",
+                title: 'Error',
+            })}
             <Snackbar
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -152,7 +179,7 @@ const PatientProfile = (props) => {
                 open={openSnack}
                 autoHideDuration={6000}
                 onClose={handleSnackClose}
-                message="Patient Personal Information Edited Successfully"
+                message="Patient Information Edited Successfully"
                 action={
                     <React.Fragment>
 
@@ -162,7 +189,7 @@ const PatientProfile = (props) => {
                     </React.Fragment>
                 }
             />
-            <div style={{ backgroundColor: "#4D5365", height: "25.1rem", justifyContent: "center", padding: 0, margin: 0 }}></div>
+            <div style={{ background: "linear-gradient(to right,  #37ACEB,#38D4D7)", height: "25.1rem", justifyContent: "center", padding: 0, margin: 0 }}></div>
             <div style={{ textAlign: "center", justifyContent: "center", position: "relative", zIndex: 1, top: "50%", margin: "-15rem 0 0 -0rem" }}>
                 <div style={{ marginLeft: "auto", marginRight: "auto", display: "Block", width: "20rem" }}>
                     <Avatar style={{

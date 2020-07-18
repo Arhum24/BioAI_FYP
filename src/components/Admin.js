@@ -41,6 +41,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Typography, Button } from "@material-ui/core";
 import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Toolbar from '@material-ui/core/Toolbar';
 import Slide from '@material-ui/core/Slide';
 import Grid from '@material-ui/core/Grid';
@@ -90,15 +94,15 @@ const useStyles = makeStyles(theme => ({
         maxHeight: 1000,
         marginTop: 0,
 
-        marginLeft: 0,
-        marginRight: 0,
-        width: "100%",
+        marginLeft: "2%",
+        // marginRight: "5%",
+        width: "95%",
         backgroundColor: "#2F3136",
     },
     DetailsButton: { borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }
     , inputs: { width: 320 },
     sideContentLogin: {
-        marginTop: "4%", marginLeft: "36%", height: 500, width: 500, borderRadius: "25px", justifyContent: "center", ddisplay: "flex", paddingTop: "2%"
+        marginTop: "2%", marginLeft: "36%", height: 500, width: 500, borderRadius: "25px", justifyContent: "center", ddisplay: "flex", paddingTop: "2%"
         , flexDirection: "column", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) "
     },
 }));
@@ -151,7 +155,8 @@ const StyledTableCell = withStyles((theme) => ({
 
     head: {
         height: 5,
-        backgroundColor: "black",
+        // #37ACEB,#38D4D7
+        backgroundColor: "#38D4D7",
 
         color: theme.palette.common.white,
         '&:nth-child(2)': {
@@ -213,6 +218,8 @@ const StyledTableCell = withStyles((theme) => ({
 const columns = [
     { id: "DoctorName", label: "Doctor Name", minWidth: 100 },
     { id: "CNIC", label: "CNIC", minWidth: 170 },
+    { id: "Email", label: "Email", minWidth: 170 },
+    { id: "Phone Number", label: "Phone Number", minWidth: 170 },
     { id: "Licence", label: "Licence", minWidth: 100 },
     { id: "Licence Country", label: "Licence Country", minWidth: 100 },
     { id: "Licence Verified", label: "Licence Verified", minWidth: 100 },
@@ -225,7 +232,7 @@ export default function Admin(props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = useState([]);
     const [doctor, setDoctor] = useState("");
-    const [edit_id, setEditID] = useState("");
+    const [id, setID] = useState("");
     const [openDetails, setOpenDetails] = React.useState(false);
     const [loggedIn, setLoggedIn] = React.useState(false);
     let [error_login, setErrorLogin] = React.useState("");
@@ -233,12 +240,13 @@ export default function Admin(props) {
     const [password_login, setPasswordLogin] = React.useState("");
     const [forceUpdate, setForceUpdate] = React.useState(0)
 
+
     async function Login() {
 
 
         let result = "";
         try {
-            result = await fetch("https://bioai-node.herokuapp.com/api/Admin/login", {
+            result = await fetch("http://localhost:8000/api/Admin/login", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -272,7 +280,7 @@ export default function Admin(props) {
     };
     const fetchData = async () => {
         const result = await axios(
-            'https://bioai-node.herokuapp.com/api/Admin/DoctorList',
+            'http://localhost:8000/api/Admin/DoctorList',
         );
 
         setRows(result.data);
@@ -282,7 +290,6 @@ export default function Admin(props) {
 
         fetchData();
     }, [forceUpdate, loggedIn]);
-
 
     function handleChange(event) {
 
@@ -299,7 +306,7 @@ export default function Admin(props) {
     const BlockDoctor = async (id, value) => {
 
         const token = localStorage.getItem("token");
-        await fetch("https://bioai-node.herokuapp.com/api/Admin/Doctor/Block", {
+        await fetch("http://localhost:8000/api/Admin/Doctor/Block", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -322,7 +329,7 @@ export default function Admin(props) {
 
         console.log(value)
         const token = localStorage.getItem("token");
-        await fetch("https://bioai-node.herokuapp.com/api/Admin//Doctor/Verify", {
+        await fetch("http://localhost:8000/api/Admin//Doctor/Verify", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -354,8 +361,9 @@ export default function Admin(props) {
 
         return (
 
-            <div>
-                <h2 style={{ marginLeft: "43.8%", color: "#2F3136" }}> Admin Sign In</h2>
+            <div style={{ marginTop: "8.5%" }}>
+
+                <h2 style={{ marginLeft: "46%", color: "gray" }}> Admin</h2>
                 <div className={classes.sideContentLogin}>
 
                     <div style={{
@@ -424,7 +432,7 @@ export default function Admin(props) {
 
     return (
         <div>
-            <AppBar position="fixed" style={{ height: "4em" }}>  <Typography variant="title" style={{ marginTop: "1.1em", marginLeft: "1em" }} color="inherit">
+            <AppBar position="fixed" style={{ height: "4em", background: "linear-gradient(to right,  #37ACEB,#38D4D7)" }}>  <Typography variant="title" style={{ marginTop: "1.1em", marginLeft: "1em" }} color="inherit">
                 BioAI- Admin
                 <Link
                     component="button"
@@ -442,7 +450,7 @@ export default function Admin(props) {
 </Link>
             </Typography></AppBar>
 
-            <Typography style={{ fontSize: "4em", marginTop: "1em" }}>User Management</Typography>
+            <Typography style={{ fontSize: "2.4em", marginTop: "2em", color: "gray", textAlign: "center", fontWeight: "bold", }}>User Management</Typography>
             <TableContainer component={Paper} className={classes.container}>
                 <Table className={classes.root} stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -494,6 +502,16 @@ export default function Admin(props) {
                                         }} >
                                             {row.cnic}
                                         </StyledTableCell>
+                                        <StyledTableCell align="left" style={{
+                                            minWidth: 170
+                                        }} >
+                                            {row.email}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="left" style={{
+                                            minWidth: 170
+                                        }} >
+                                            {row.phone_number}
+                                        </StyledTableCell>
                                         <StyledTableCell align="left" >
                                             {row.licence}
                                         </StyledTableCell>
@@ -509,7 +527,7 @@ export default function Admin(props) {
 
                                         <StyledTableCell align="right" >
 
-                                            <Button
+                                            {/* <Button
                                                 variant="outlined"
 
                                                 style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
@@ -517,7 +535,7 @@ export default function Admin(props) {
                                             // onClick={}
                                             >
                                                 Details
-                                        </Button>
+                                        </Button> */}
                                             {row.active ?
                                                 <Button
                                                     variant="outlined"
@@ -530,8 +548,8 @@ export default function Admin(props) {
                                                 <Button
                                                     variant="outlined"
 
-                                                    style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
-                                                    startIcon={<DoneIcon style={{ color: "green" }} />}
+                                                    style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem", fontSize: 11, width: 95 }}
+                                                    startIcon={<DoneIcon size="10px" style={{ color: "green" }} />}
                                                     onClick={() => { BlockDoctor(row._id, true); setForceUpdate(forceUpdate + 1); }}>
                                                     Unblock
                                         </Button>}
@@ -539,7 +557,7 @@ export default function Admin(props) {
                                                 <Button
                                                     variant="outlined"
 
-                                                    style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
+                                                    style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem", fontSize: 13 }}
                                                     startIcon={<VerifiedUserIcon style={{ color: "green" }} />}
                                                     onClick={() => { Verify(row._id, true); setForceUpdate(forceUpdate + 1); }}>
                                                     Verify Licence
@@ -548,7 +566,7 @@ export default function Admin(props) {
                                                 <Button
                                                     variant="outlined"
 
-                                                    style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
+                                                    style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem", fontSize: 11 }}
                                                     startIcon={<VerifiedUserIcon style={{ color: "red" }} />}
                                                     onClick={() => { Verify(row._id, false); setForceUpdate(forceUpdate + 1); }}>
                                                     Unverify Licence

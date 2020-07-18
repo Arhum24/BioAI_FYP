@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: 400,
     width: "95%",
   },
-  DetailsButton: { borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }
+  DetailsButton: { borderColor: "#37ACEB", color: "#37ACEB", marginRight: "0.5rem" }
 }));
 const StyledTableRow = withStyles((theme) => ({
 
@@ -92,7 +92,7 @@ const StyledTableCell = withStyles((theme) => ({
 
   head: {
     height: 5,
-    backgroundColor: "#5A75D6",
+    background: "linear-gradient(to right,  #38D4D7,#38D4D7)",
 
     color: theme.palette.common.white,
     '&:nth-child(2)': {
@@ -190,7 +190,7 @@ export default function DashBoardTable(props) {
               }
               <StyledTableCell
                 key="option"
-                align="right"
+                align="center"
                 style={{
                   minWidth: 170
                 }}
@@ -245,7 +245,7 @@ export default function DashBoardTable(props) {
                       {new Date(row.DOB).toISOString().substring(0, 10)}
                     </StyledTableCell>
 
-                    <StyledTableCell align="right" >
+                    <StyledTableCell align="center" >
                       <ListItemLink to={{ pathname: "/Patient", passed: { Patient: JSON.stringify(row), forceUpdate: props.forceUpdate } }}
                         text="Details"
                         icon={<EditIcon />}
@@ -279,7 +279,7 @@ export default function DashBoardTable(props) {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        style={{ marginRight: "1.8rem", color: "#3F51B5" }}
+        style={{ marginRight: "1.8rem", color: "#37ACEB" }}
       />
     </div>
 

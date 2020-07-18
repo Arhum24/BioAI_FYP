@@ -18,10 +18,10 @@ import FAQs from "./components/FAQ";
 import Admin from "./components/Admin";
 import Logout from "./components/logout";
 import BioScan from "./components/BioScan";
+import DiseasePrediction from "./components/DiseasePrediction";
 import {
   Switch,
-  Redirect,
-  Route,
+  Route, Redirect,
   BrowserRouter as Router,
 } from "react-router-dom";
 import DoctorProfile from "./components/DoctorProfile";
@@ -29,48 +29,142 @@ import DoctorProfile from "./components/DoctorProfile";
 
 
 function App() {
-  const [token, setToken] = React.useState(localStorage.getItem("token"))
-  const toggle = function () {
-    setToken(localStorage.getItem("token"));
-  }
-  const loggedIn = function () {
 
-    setToken(localStorage.getItem("token"));
-
-  }
 
 
   return (
     <Router history={history}>
       {/* <Header /> */}
       <Switch>
-      <Route
-                exact
-                path="/"
-                render={() => {
-                    return (
-                    
-                      <Redirect to="/Autherization" /> 
-                     
-                    )
-                }}
-              />
         <Route path="/AddPatient" component={AddPatient} />
         <Route path="/AddDiagnosis" component={AddDiagnosis} />
-        <Route path="/Dashboard" ><Dashboard update={loggedIn} /></Route>
+        <Route path="/Dashboard"
+          render={() => {
+
+            if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false)
+              return (
+                <Redirect to="/Autherization" />
+
+              )
+            else {
+
+              return <Dashboard />
+            }
+          }}
+
+        />
+
+
+
+
+
+
         <Route path="/Patient" component={Patient} />
-        <Route path="/Appointments" component={Appointments} />
+        <Route path="/Appointments"
+
+          render={() => {
+
+            if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false)
+              return (
+                <Redirect to="/Autherization" />
+
+              )
+            else {
+
+              return <Appointments />
+            }
+          }}
+
+
+        />
         <Route path="/PatientsMain" component={PatientsMain} />
         <Route path="/DiagnosisMain" component={DiagnosisMain} />
         <Route path="/PDFMake" component={PDFMake} />
-        <Route path="/FAQ" component={FAQs} />
+        <Route path="/FAQ"
+
+          render={() => {
+
+            if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false)
+              return (
+                <Redirect to="/Autherization" />
+
+              )
+            else {
+
+              return <FAQs />
+            }
+          }}
+
+        />
         <Route path="/Autherization" component={Autherization} />
-        <Route path="/logout" ><Logout update={toggle} /></Route>
+        <Route path="/logout" ><Logout /></Route>
         <Route path="/Admin" component={Admin} />
-        <Route path="/Profile" component={DoctorProfile} />
+        <Route path="/Profile"
+
+          render={() => {
+
+            if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false)
+              return (
+                <Redirect to="/Autherization" />
+
+              )
+            else {
+
+              return <DoctorProfile />
+            }
+          }}
+
+        />
         <Route path="/PDFShow" component={PDFShow} />
-        <Route path="/BioScan" component={BioScan} />
+        <Route path="/BioScan"
+
+          render={() => {
+
+            if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false)
+              return (
+                <Redirect to="/Autherization" />
+
+              )
+            else {
+
+              return <BioScan />
+            }
+          }}
+
+        />
+        <Route path="/DiseasePrediction"
+
+          render={() => {
+
+            if (!localStorage.getItem("token") || JSON.parse(localStorage.getItem("profile")).auth == false)
+              return (
+                <Redirect to="/Autherization" />
+
+              )
+            else {
+
+              return <DiseasePrediction />
+            }
+          }}
+
+
+
+
+        />
+        <Route
+          exact
+          path="/"
+          render={() => {
+
+            localStorage.clear();
+            return (
+              <Redirect to="/Autherization" />
+
+            )
+          }}
+        />
         <Route path="/*" component={PageNotFound} />
+
       </Switch>
 
     </Router>

@@ -11,7 +11,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 function Logout(props) {
 
     localStorage.removeItem("token")
-    props.update();
+    localStorage.removeItem("profile")
     return (
 
         <Redirect to="/Autherization" />

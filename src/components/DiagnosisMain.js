@@ -15,7 +15,7 @@ import Header from './Header';
 const useStyles = makeStyles(theme => ({
 
     AddDiagnosis: {
-        backgroundColor: "#5A75D6",
+        backgroundColor: "#38D4D7",
         position: "relative",
         color: "white",
         left: "50%",
@@ -95,7 +95,7 @@ function DiagnosisMain(props) {
         const profile = JSON.parse(localStorage.getItem('profile'));
         const doct_id = profile._id
         async function fetchData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/diagnosis/" + doct_id + "/" + props.patient._id, {
+            await fetch("http://localhost:8000/api/auth/diagnosis/" + doct_id + "/" + props.patient._id, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",

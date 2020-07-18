@@ -49,8 +49,8 @@ function EditPatientMedical(props) {
         chip: {
             color: "white",
 
-            backgroundColor: "#5A75D6",
-            borderColor: "#5A75D6",
+            backgroundColor: "#37ACEB",
+            borderColor: "#37ACEB",
             '&:hover': {
                 background: "white",
                 color: "black",
@@ -158,7 +158,7 @@ function EditPatientMedical(props) {
     return (
         <div>
             <Dialog open={props.openPatientEdit} onClose={props.handleEditPatientClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title" style={{ backgroundColor: "#5A75D6", color: "white" }}>Edit Patient's Medical Information <EditIcon style={{ fontSize: "1.8em", float: "right" }} /></DialogTitle>
+                <DialogTitle id="form-dialog-title" style={{ background: "linear-gradient(to right, #38D4D7, #37ACEB)", color: "white" }}>Edit Patient's Medical Information <EditIcon style={{ fontSize: "1.8em", float: "right" }} /></DialogTitle>
                 <DialogContent>
                     <DialogContentText style={{ color: "black" }}>
 
@@ -288,7 +288,7 @@ function EditPatientMedical(props) {
                     <Button onClick={props.handlePatientMedicalEditClose} color="secondary">
                         Cancel
                      </Button>
-                    <Button onClick={confirm} style={{ color: "#4D5365" }}>
+                    <Button onClick={confirm} style={{ color: "#37ACEB" }}>
                         Confirm Change
         </Button>
                 </DialogActions>

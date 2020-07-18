@@ -25,22 +25,28 @@ import { Redirect } from "react-router-dom"; import Slide from '@material-ui/cor
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import moment from "moment";
+import { Message } from 'shineout'
 export default function AddDiagnosis(props) {
     const classes = useStyles();
     const [chips, setChips] = useState([]);
     const numbers = ['1', '2', '3', '4', '5'];
-    const [patient, setPatient] = React.useState(JSON.parse(props.location.passed.patient))
+    const [patient, setPatient] = React.useState("")
     const [DiseaseName, setDiseaseName] = React.useState("");
     const [Tests, setTests] = React.useState([]);
     const [Medicines, setMedicines] = React.useState([]);
     const [Symptoms, setSymptoms] = React.useState([]);
-    const [Findings, setFindings] = React.useState("");
+    const [Findings, setFindings] = React.useState([]);
     const [Recommended_Foods, setRecommendFoods] = React.useState([]);
     const [Preventive_Foods, setPreventiveFoods] = React.useState([]);
     const [Diet_Note, setDietNote] = React.useState("");
     const [Comments, setComments] = React.useState("");
-    const [Date, setDate] = React.useState("");
+    const [Date, setDate] = React.useState(moment());
     const [Medicines_Notes, setMedicineNotes] = React.useState("");
+    const [failure, setFailure] = React.useState(false);
+    const [failureMessage, setFailureMessage] = React.useState("")
+
+    const [success, setSuccess] = React.useState(false);
 
     const goBack = () => {
         props.history.push('/PatientsMain');
@@ -73,8 +79,9 @@ export default function AddDiagnosis(props) {
     });
     React.useEffect(() => {
 
-
-        setPatient(JSON.parse(props.location.passed.patient));
+        if (props.location.passed) {
+            setPatient(JSON.parse(props.location.passed.patient));
+        }
 
 
 
@@ -111,7 +118,7 @@ export default function AddDiagnosis(props) {
             const doct_id = profile._id
             let result = "";
             try {
-                await fetch("https://bioai-node.herokuapp.com/api/auth/diagnosis", {
+                await fetch("http://localhost:8000/api/auth/diagnosis", {
                     method: 'POST',
 
                     body: JSON.stringify({
@@ -121,7 +128,7 @@ export default function AddDiagnosis(props) {
                         // 'LastName': LastName,
                         Tests: Tests,
                         Medicines: Medicines,
-                        Medicines_Notes: Medicines_Notes,
+                        Medicine_Notes: Medicines_Notes,
                         Symptoms: Symptoms,
                         Findings: Findings,
                         Recommended_Foods: Recommended_Foods,
@@ -142,6 +149,16 @@ export default function AddDiagnosis(props) {
                 }).then((response) => response.json()).then((data) => {
                     result = data
                     console.log(data)
+                    if (!data.error) {
+                        // handleSnackClick();
+                        setSuccess(true);
+
+                    }
+                    else {
+
+                        setFailure(true);
+                        setFailureMessage("Please Enter Correct Details");
+                    }
 
                 })
                 return result
@@ -152,8 +169,18 @@ export default function AddDiagnosis(props) {
             }
         }
 
-        postPatient();
-        handleSnackClick();
+        if (Symptoms.length < 1 || Findings < 1) {
+
+            setFailureMessage("Please Enter Required Fields");
+            setFailure(true);
+
+        } else {
+
+            postPatient();
+
+
+        }
+
     }
     const handleDeleteSymptomsChip = (chips_, index) => {
         let chips_all = Symptoms;
@@ -229,7 +256,8 @@ export default function AddDiagnosis(props) {
         console.log("RUnDel")
     };
     const handleChange = event => {
-
+        setSuccess(false);
+        setFailure(false);
         switch (event.target.name) {
             case 'DiseaseName':
                 setDiseaseName(event.target.value); return;
@@ -261,6 +289,7 @@ export default function AddDiagnosis(props) {
         setDate(date);
     };
     if (!localStorage.getItem("token")) { return <Redirect to='/Autherization' /> }
+    else if (!props.location.passed) { return <Redirect to='/PatientsMain' /> }
     else
         return (
 
@@ -296,6 +325,15 @@ export default function AddDiagnosis(props) {
           Back to Patient List
         </Button>
                 </div>
+                {success ? Message.success(<div style={{ width: 240 }}>Diagnosis Added Successfully</div>, 8, {
+                    position: "bottom-right",
+                    title: 'Sucessfully Added',
+                    onClose: () => { setSuccess(false) }
+                }) : failure && Message.warn(<div style={{ width: 240 }}>{failureMessage}</div>, 0, {
+                    position: "bottom-right",
+                    title: 'Error',
+                    onClose: () => { setFailure(false); setFailureMessage("") }
+                })}
                 <Grid container spacing={2}>
                     <Grid item xs={11}>
                         <Paper className={classes.top_paper}>
@@ -330,6 +368,7 @@ export default function AddDiagnosis(props) {
                                     // className={classes.inputs}
                                     />
                                 </div>
+                                <p style={{ fontSize: 10, textAlign: "left", marginLeft: 8, marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                                 <div className={classes.holders_inner}>
                                     <Typography className={classes.labels}>
                                         Clinical Findings:
@@ -339,8 +378,10 @@ export default function AddDiagnosis(props) {
                                         name="Findings"
                                         className={classes.inputs_select}
                                         onChange={handleChange}
+                                        style={{ fontSize: 15 }}
                                     // placeholder="Address"
                                     />
+                                    <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                                 </div>
 
                             </div>
@@ -433,6 +474,7 @@ export default function AddDiagnosis(props) {
                                         name="Medicines_Notes"
                                         className={classes.inputs}
                                         onChange={handleChange}
+                                        style={{ fontSize: 15 }}
                                     // placeholder="Address"
                                     />
                                 </div>
@@ -496,6 +538,7 @@ export default function AddDiagnosis(props) {
                                         name="Diet_Note"
                                         className={classes.inputs}
                                         onChange={handleChange}
+                                        style={{ fontSize: 15 }}
                                     // placeholder="Address"
                                     />
                                 </div>
@@ -523,6 +566,7 @@ export default function AddDiagnosis(props) {
                                         name="Comments"
                                         className={classes.inputs}
                                         onChange={handleChange}
+                                        style={{ fontSize: 15 }}
                                     // placeholder="Address"
                                     />
                                 </div>

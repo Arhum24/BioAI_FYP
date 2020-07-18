@@ -129,10 +129,10 @@ const MedicalInfor = (props) => {
                 outline: '1px solid red'
             }
         }, root: {
-            backgroundColor: "#5A75D6",
+            background: "linear-gradient(to right,  #37ACEB,#38D4D7)",
             color: theme.palette.common.white,
             '&:hover': {
-                backgroundColor: "#4D5365"
+                background: "linear-gradient(to right, #38D4D7,#37ACEB)"
 
             }
             ,

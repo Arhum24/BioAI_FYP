@@ -34,6 +34,8 @@ import Header from './Header';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import { Label } from "@material-ui/icons";
+import { Message } from 'shineout'
+
 const useStyles = makeStyles(theme => ({
     '@global': {
         '*::-webkit-scrollbar': {
@@ -220,8 +222,13 @@ export default function DoctorProfile(props) {
     const [password, setPassword] = React.useState(JSON.parse(localStorage.getItem("profile")).password);
     const [hospital, setHospital] = React.useState(JSON.parse(localStorage.getItem("profile")).hospital);
     const token = localStorage.getItem("token");
-    const handleChange = (event) => {
 
+    const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
+    const [failureMessage, setFailureMessage] = React.useState("");
+    const handleChange = (event) => {
+        setFailure(false);
+        setSuccess(false);
         switch (event.target.name) {
             case "name":
                 setName(event.target.value); return;
@@ -254,7 +261,7 @@ export default function DoctorProfile(props) {
 
         let result = "";
         try {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/user/" + profile._id, {
+            await fetch("http://localhost:8000/api/auth/user/" + profile._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -276,9 +283,38 @@ export default function DoctorProfile(props) {
 
 
                 }),
-            }).then((response) => response.json()).then((data) => {
+            }).then((response) => response.json()).then(async (data) => {
                 result = data;
-                console.log("UPDATER RETURNED = " + result)
+
+                if (!data.error) {
+
+                    async function fetchData() {
+
+                        const token = localStorage.getItem("token");
+                        await fetch("http://localhost:8000/api/auth/userdata", {
+                            method: 'GET',
+                            headers: {
+                                'x-access-token': token, "Access-Control-Allow-Origin": "*",
+                            },
+
+                        }).then((response) => response.json()).then(async (data) => {
+
+                            await localStorage.setItem("profile", JSON.stringify(data))
+                            // props.history.push("/Dashboard")
+
+                        })
+                    }
+
+                    fetchData();
+
+                    setSuccess(true);
+                }
+                else {
+
+                    setFailureMessage("Error while updating. Please Make sure that you entered correct details");
+                    setFailure(true);
+
+                }
 
             })
         } catch (err) {
@@ -300,7 +336,15 @@ export default function DoctorProfile(props) {
 
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Paper className={classes.paper}> <div style={{ backgroundColor: "#4D5365", height: "25.1rem", justifyContent: "center", padding: 0, margin: 0 }}></div>
+
+                    {success ? Message.success(<div style={{ width: 240 }}>Profile Updated Successfully</div>, 8, {
+                        position: "bottom-right",
+                        title: 'Sucessfully Updated',
+                    }) : failure && Message.warn(<div style={{ width: 240 }}>{failureMessage}</div>, 0, {
+                        position: "bottom-right",
+                        title: 'Error',
+                    })}
+                    <Paper className={classes.paper}> <div style={{ background: "linear-gradient(to right, #38D4D7, #37ACEB)", height: "25.1rem", justifyContent: "center", padding: 0, margin: 0 }}></div>
                         <div style={{ textAlign: "center", justifyContent: "center", position: "relative", zIndex: 1, top: "50%", margin: "-15rem 0 0 -0rem" }}>
                             <div style={{ marginLeft: "auto", marginRight: "auto", display: "Block", width: "20rem" }}>
                                 <Avatar style={{
@@ -314,11 +358,13 @@ export default function DoctorProfile(props) {
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper className={classes.paper} style={{ marginTop: "8em", backgroundColor: "white" }}>
+                    <Paper className={classes.paper} style={{ marginTop: "0.1em", backgroundColor: "white" }}>
 
-                        <table style={{ width: "100%", border: "1px solid green" }}>
+                        <table style={{ width: "100%", border: "1px solid #38D4D7" }}>
                             <tbody style={{ padding: "20" }}>
-                                <tr style={{ lineHeight: "80px", fontWeight: "bold", fontSize: "1.4rem", color: "white", border: "1px solid white", backgroundColor: "green" }}>
+                                <tr style={{
+                                    lineHeight: "80px", fontWeight: "bold", fontSize: "1.4rem", color: "white", border: "1px solid white", background: "linear-gradient(to right, #38D4D7, #37ACEB)"
+                                }}>
                                     <th colspan="2">Personal Information </th>
                                 </tr>
                                 <tr style={{ lineHeight: "80px", fontWeight: "bold", fontSize: "1.4rem", color: "gray", border: "1px solid white", backgroundColor: "white" }}>
@@ -466,7 +512,7 @@ export default function DoctorProfile(props) {
                         </table>
                         <Button
                             variant="contained"
-                            style={{ backgroundColor: "green", color: "white", fontSize: 13, marginRight: "-95%", marginTop: "1%" }}
+                            style={{ backgroundColor: "#38D4D7", color: "white", fontSize: 13, marginRight: "-95%", marginTop: "1%" }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 let result = UpdateInfo();
@@ -486,7 +532,7 @@ export default function DoctorProfile(props) {
                 </Grid>
 
             </Grid>
-        </div>
+        </div >
 
 
 

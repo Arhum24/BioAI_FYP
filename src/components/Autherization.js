@@ -35,6 +35,9 @@ import chroma from 'chroma-js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Select from 'react-select';
+import { Message } from 'shineout'
+import { Carousel } from 'shineout'
+import BackroundImageHome from "../static/images/corousel/background3.jpg";
 const ITEM_HEIGHT = 150;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -55,20 +58,22 @@ const useStyles = makeStyles(theme => ({
     },
     container: {
 
-        marginTop: "3.3%",
-        backgroundColor: "#0B9DF0",
+        marginTop: "2.9%",
+        // backgroundColor: "#1A1A1C",
+        // background: "linear-gradient(to left,gray,black)",
+        backgroundImage: "url(" + BackroundImageHome + ")",
         width: "100%",
-        height: 1100,
+        height: 1500,
         postion: "absolute",
         display: "flex"
 
     },
     sideHeading: { fontSize: "50px", color: "white", fontWeight: "bold", position: "relative", paddingTop: "18%", paddingLeft: "18%", textShadow: "2px 2px #2F3136 " },
     sideContentLogin: {
-        backgroundColor: "white", marginTop: "7%", marginLeft: "14%", height: 500, width: 500, borderRadius: "25px", justifyContent: "center", ddisplay: "flex",
+        backgroundColor: "white", marginTop: "9%", marginLeft: "6%", height: 500, width: 500, borderRadius: "25px", justifyContent: "center", ddisplay: "flex",
         flexDirection: "column", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) "
     }, sideContentSignup: {
-        backgroundColor: "white", marginTop: "7%", marginLeft: "14%", height: 900, width: 600, borderRadius: "25px", justifyContent: "center", ddisplay: "flex",
+        backgroundColor: "white", marginTop: "9%", marginLeft: "6%", height: 1000, width: 600, borderRadius: "25px", justifyContent: "center", ddisplay: "flex",
         flexDirection: "column", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) "
     }
     , inputs: { width: 320 }
@@ -338,13 +343,14 @@ function Autherization(props) {
     const [email_login, setEmailLogin] = React.useState("");
     const [password_login, setPasswordLogin] = React.useState("");
     const [login, setLogin] = React.useState(true);
+    const [passwordType, setPasswordType] = React.useState(false);
     const options = countryList().getData();
-    console.log(options)
+
     const names = countries.map(function (item, i) {
 
         return { value: item.label, label: item.label };
     })
-    console.log(names)
+
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [phone_number, setPhoneNumber] = React.useState("");
@@ -355,8 +361,23 @@ function Autherization(props) {
     const [qualification, setQualification] = React.useState("");
     const [cnic, setCNIC] = React.useState("");
 
-    let [error_login, setErrorLogin] = React.useState("");
-    let [error_register, setErrorRegister] = React.useState("");
+    const [error_login, setErrorLogin] = React.useState("");
+    const [error_register, setErrorRegister] = React.useState("");
+
+
+
+    const [error, setError] = React.useState({
+        name: "",
+        email: "",
+        password: "",
+        licence: "",
+        licence_country: "",
+        cnic: "",
+        phone_number: "",
+        hospital: "",
+        qualification: "",
+    })
+    useEffect(() => { }, [error, error_login, error_register])
     async function Login() {
         // new URLSearchParams({
         //     'email': email_login,
@@ -365,10 +386,10 @@ function Autherization(props) {
         // })
         // e.preventDefault();
         const data = { email: email_login, password: password_login }
-        console.log(data)
+
         let result = "";
         try {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/login", {
+            await fetch("http://localhost:8000/api/auth/login", {
                 method: 'POST',
 
                 body: new URLSearchParams({
@@ -376,80 +397,175 @@ function Autherization(props) {
                     'password': password_login,
 
                 }),
-            }).then((response) => response.json()).then((data) => {
+            }).then((response) => response.json()).then(async (data) => {
                 result = data
-                console.log("Login respone")
-                console.log(data)
+                console.log("Result Login ", data)
+                if (data.blocked === true) {
+                    setErrorLogin("You have been blocked for providing wrong information.")
+                }
+
+                else if (data.auth == false) {
+
+                    setErrorLogin("Wrong Email or Password");
+                }
+                else if (data.Message == "No User Found") {
+                    setErrorLogin("Please Enter Correct Email And Password");
+
+                }
+                else {
+                    try {
+                        await localStorage.setItem("token", data.token)
+                        async function fetchData() {
+
+                            const token = localStorage.getItem("token");
+                            await fetch("http://localhost:8000/api/auth/userdata", {
+                                method: 'GET',
+                                headers: {
+                                    'x-access-token': token, "Access-Control-Allow-Origin": "*",
+                                },
+
+                            }).then((response) => response.json()).then(async (data) => {
+
+                                await localStorage.setItem("profile", JSON.stringify(data))
+                                props.history.push("/Dashboard")
+
+                            })
+                        }
+
+                        fetchData();
+
+
+
+
+                    }
+                    catch (error) {
+
+                        setErrorLogin("Wrong Email or Password");
+
+                    }
+
+                }
+
 
             })
-            //     console.log(result);
-            //     if (result.auth === true) {
-            //         localStorage.setItem("token", result.token)
-            //     }
-            //     else { setErrorLogin("Incorrect Email or Password"); }
+
         } catch (err) {
 
             return result = { auth: false }
         }
-        // handleClose();
-        // var token = localStorage.getItem("token")
-        // console.log(token);
-        // props.history.push("/Dashboard")
+
 
         return result
     }
 
     async function Register(e) {
-        // new URLSearchParams({
-        //     'email': email_login,
-        //     'password': password_login,
-
-        // })
-        // e.preventDefault();
-        const data = { email: email, password: password, licence_country: licence_country, cnic: cnic, name: name, phone_number: phone_number }
-        console.log(data)
-        let result = "";
-        try {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/register", {
-                method: 'POST',
-
-                body: new URLSearchParams({
-                    'email': email,
-                    'password': password,
-                    'cnic': cnic,
-                    'licence': licence,
-                    'licence_country': licence_country,
-                    'name': name,
-                    'qualification': qualification,
-                    'phone_number': phone_number,
-                    'hospital': hospital,
 
 
-                }),
-            }).then((response) => response.json()).then((data) => {
-                result = data;
-                console.log("REGISTER RETURNED = " + result)
-                console.log(data)
 
-            })
-        } catch (err) {
+        if (email === "") {
+            var error_fields = error;
+            error.email = "Please Enter Email Address"
+            setError(error_fields)
 
-            return result = { auth: false }
         }
-        //     if (result.auth === true) {
-        //         localStorage.setItem("token", result.token)
-        //     }
-        //     else { setErrorRegister("Please Enter Correct Details"); }
-        // } catch (err) {
-        //     setErrorRegister("Please Enter Correct Details");
+        if (name === "") {
+            var error_fields = error;
+            error.name = "Please Enter Name"
+            setError(error_fields)
+
+        }
+        if (password === "") {
+            var error_fields = error;
+            error.password = "Please Enter Password"
+            setError(error_fields)
+
+        }
+        if (cnic === "") {
+            var error_fields = error;
+            error.cnic = "Please Enter CNIC"
+            setError(error_fields)
+
+        }
+        if (licence === "") {
+            var error_fields = error;
+            error.licence = "Please Enter Licence"
+            setError(error_fields)
+
+        }
+        if (licence_country == []) {
+            var error_fields = error;
+            error.licence_country = "Please Select Licence Country"
+            setError(error_fields)
+
+        }
+        if (qualification === "") {
+            var error_fields = error;
+            error.qualification = "Please Select Qualification/Degree"
+            setError(error_fields)
+
+        }
+        if (phone_number === "") {
+            var error_fields = error;
+            error.phone_number = "Please Enter Phone Number"
+            setError(error_fields)
+
+        }
+        if (hospital === "") {
+            var error_fields = error;
+            error.hospital = "Please Enter Hospital Name"
+            setError(error_fields)
+
+        }
+
+        if (email != "" && password != "" && cnic != "" && licence != "" && licence_country != "" && name != "" && qualification != "" && phone_number != "" && hospital != "") {
+            let result = { auth: true };
+            try {
+                await fetch("http://localhost:8000/api/auth/register", {
+                    method: 'POST',
+
+                    body: new URLSearchParams({
+                        'email': email,
+                        'password': password,
+                        'cnic': cnic,
+                        'licence': licence,
+                        'licence_country': licence_country,
+                        'name': name,
+                        'qualification': qualification,
+                        'phone_number': phone_number,
+                        'hospital': hospital,
 
 
-        // }
-        // // handleClose();
-        // var token = localStorage.getItem("token")
-        // console.log(token);
-        // props.history.push("/Dashboard")
-        return result
+                    }),
+                }).then((response) => response.json()).then((data) => {
+                    result = data;
+                    console.log("Result = ", result.errmsg)
+                    if (result.error) {
+                        Message.error(<div style={{ width: 500 }}>User Already Exists. Make sure that CNIC/Licence/Email is not already registered</div>, 3, {
+                            position: "bottom-right",
+                            title: 'Failure',
+                        })
+                        setErrorRegister("User Already Exist")
+
+                    }
+                    else {
+                        Message.success(<div style={{ width: 240 }}>Successfully Registered</div>, 3, {
+                            position: "bottom-right",
+                            title: 'Success',
+                        })
+                    }
+                    return result
+
+
+                })
+            } catch (err) {
+
+                return result = { auth: false, error: err }
+            }
+
+
+
+        }
+        return { auth: false, }
 
     }
 
@@ -466,14 +582,17 @@ function Autherization(props) {
 
     }
     const customStyles = {
-        control: styles => ({ ...styles, color: "black", backgroundColor: 'white' }),
+        control: styles => ({ ...styles, color: "black", backgroundColor: 'white', marginLeft: -10 }),
 
-        input: styles => ({ marginLeft: "-30ox", width: "280px", color: "black", }),
+        input: styles => ({ width: "280px", color: "blue" }),
         placeholder: styles => ({ ...styles }),
-        option: styles => ({ color: "red", marginLeft: "50px" }),
+        option: styles => ({ color: "red", marginLeft: "30px" }),
         singleValue: (styles, { data }) => ({ ...styles }),
     };
+    function toggleShow() {
 
+        setPasswordType(!passwordType)
+    }
     function handleChange2(event) {
 
         switch (event.target.name) {
@@ -504,188 +623,212 @@ function Autherization(props) {
     return (
         <div className={classes.container}>
             {/* <Header token={localStorage.getItem("token")} /> */}
-            <AppBar position="fixed" style={{ height: "4em" }}>  <Typography variant="title" style={{ marginTop: "1.1em", marginLeft: "1em" }} color="inherit">
+            <AppBar position="fixed" style={{ height: "4em", background: "linear-gradient(to right,  #37ACEB,#38D4D7)" }}>  <Typography variant="title" style={{ marginTop: "1.1em", marginLeft: "1em" }} color="inherit">
                 BioAI- Doctor Assistant
           </Typography></AppBar>
 
-            <Typography className={classes.sideHeading}>Welcome to BioAI</Typography>
+            {/* <Typography className={classes.sideHeading}>Welcome to BioAI</Typography> */}
+            <Carousel
+                style={{ width: 900, height: 500, marginLeft: "7%", marginTop: "9%", borderWidth: 4, borderColor: "white" }}
+                interval={5000}
+                animation='slide'
+                indicatorType='circle'
+                indicatorPosition='center'
+            >
+
+                <a>
+                    <img alt="" style={{ width: '100%', height: '100%' }} src={require('../static/images/corousel/main.png')} />
+                </a>
+                <a>
+                    <img alt="" style={{ width: '100%', height: '100%' }} src={require('../static/images/corousel/xray.png')} />
+                </a>
+                <a>
+                    <img alt="" style={{ width: '100%', height: '100%' }} src={require('../static/images/corousel/biopsy.png')} />
+                </a>
+                <a>
+                    <img alt="" style={{ width: '100%', height: '100%' }} src={require('../static/images/corousel/features.png')} />
+                </a>
+            </Carousel>
+
+
+            {
+                login ?
+                    <div className={classes.sideContentLogin}>
+
+                        <div style={{
+                            backgroudColor: "white", color: "white", display: "flex",
+                            flexDirection: "column", justifyContent: "center", marginTop: "15%", marginleft: "12%"
+                        }}>
+
+                            <form style={{
+                                justifyContent: "center", display: "flex",
+                                flexDirection: "column", justifyContent: "center", textAlign: "center", marginLeft: "12%", paddingBottom: "15%"
+
+                            }} noValidate autoComplete="off">
+                                <div style={{ display: "flex", flexDirection: "row" }}>
+                                    <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "10%" }} >SignIn</LockIcon>
+                                    <Typography style={{ color: "#5A75D6" }}>Sign in</Typography>
+                                </div>
+                                <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-17%", marginTop: "-7%" }}>{error_login}</Typography>
+                                <List>
+                                    <ListItem >
+                                        <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
+                                        <TextField className={classes.inputs} name="email_login" onChange={handleChange} id="standard-basic" label="Email" />
+                                    </ListItem>
+                                    <ListItem  >
+                                        <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange} name="password_login" type="password" label="Password" />
+                                    </ListItem>
+
+                                </List>
+
+                                <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        let result = Login();
+                                        result.then(async (data) => {
+
+                                        })
 
 
 
-            {login ?
-                <div className={classes.sideContentLogin}>
+                                    }}>
+                                    Confirm Login
+                                 </Button>
+                                <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Dont Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(false) }}>Sign up</Link></Typography>
+                            </form>
 
-                    <div style={{
-                        backgroudColor: "white", color: "white", display: "flex",
-                        flexDirection: "column", justifyContent: "center", marginTop: "15%", marginleft: "12%"
-                    }}>
 
-                        <form style={{
-                            justifyContent: "center", display: "flex",
-                            flexDirection: "column", justifyContent: "center", textAlign: "center", marginLeft: "12%", paddingBottom: "15%"
 
-                        }} noValidate autoComplete="off">
-                            <div style={{ display: "flex", flexDirection: "row" }}>
-                                <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "10%" }} >SignIn</LockIcon>
-                                <Typography style={{ color: "#5A75D6" }}>Sign in</Typography>
-                            </div>
-                            <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-17%", marginTop: "-7%" }}>{error_login}</Typography>
-                            <List>
-                                <ListItem >
-                                    <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
-                                    <TextField className={classes.inputs} name="email_login" onChange={handleChange} id="standard-basic" label="Email" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange} name="password_login" type="password" label="Password" />
-                                </ListItem>
+                        </div> </div> : <div className={classes.sideContentSignup}>
 
-                            </List>
+                        <div style={{
+                            backgroudColor: "white", color: "white", display: "flex",
+                            flexDirection: "column", justifyContent: "center", marginTop: "8%", marginleft: "20%"
+                        }}>
 
-                            <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }}
-                                onClick={(e) => {
+                            <form style={{
+                                justifyContent: "center", display: "flex",
+                                flexDirection: "column", justifyContent: "center", textAlign: "center", marginleft: "20%", marginLeft: "15%", paddingBottom: "15%"
+
+                            }} noValidate autoComplete="off">
+                                <div style={{ display: "flex", flexDirection: "row" }}>
+                                    <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "5%" }} >SignIn</LockIcon>
+                                    <Typography style={{ color: "#5A75D6", marginLeft: "1%" }}>Sign Up</Typography>
+                                </div>
+                                <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-22%" }}>{error_register}</Typography>
+                                <List>
+                                    <ListItem >
+                                        <ListItemIcon><PersonIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
+                                        <TextField className={classes.inputs} id="standard-basic" onChange={handleChange2} name="name" label="Name" />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.name}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="email" type="email" label="Email" />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.email}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><PhoneIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="phone_number" type="number" label="Phone Number" />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.phone_number}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="password" type="password" label="Password" />
+
+
+                                    </ListItem>
+
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.password}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><FingerprintIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="cnic" type="number" label="CNIC" />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.cnic}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><InboxIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="licence" helperText="Please Enter Your Medical Licence Number" label="Licence No." />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.licence}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><SchoolIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="qualification" helperText="Please Enter Your latest Medical Degree" label="Qualification" />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.licence_country}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><LocalHospitalIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+                                        <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="hospital" label="Hospital/Clinic" />
+
+
+                                    </ListItem>
+                                    <p style={{ color: "red", marginTop: -10, textAlign: "left", marginLeft: 64 }}>{error.hospital}</p>
+                                    <ListItem  >
+                                        <ListItemIcon><PublicIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
+
+                                        <Select
+
+                                            styles={customStyles}
+                                            options={names}
+
+
+                                            onChange={(value) => { console.log(value); setLicenceCountry(value.value); console.log(licence_country) }}
+
+
+
+                                        />
+                                    </ListItem >
+
+                                </List>
+
+                                <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }} onClick={(e) => {
                                     e.preventDefault();
-                                    let result = Login();
+                                    let result = Register();
                                     result.then((data) => {
-
                                         try {
-                                            localStorage.setItem("token", data.token)
 
-                                            var token = localStorage.getItem("token")
-                                            console.log("Token Set : ", token)
+                                            if (data.auth != false) {
+                                                localStorage.setItem("token", data.token)
+                                                var token = localStorage.getItem("token")
+                                                console.log(token);
+                                                console.log(data);
+                                                setErrorRegister("Registered Successfully");
+                                                props.history.push("/Autherization")
+                                                window.location.reload();
 
-                                            props.history.push("/Dashboard")
+
+                                            }
+                                            // else if (data.auth == false) { setErrorRegister("User Alraedy Exists"); }
+                                        } catch (errr) {
+
+                                            setErrorLogin("Error Registering");
                                         }
-                                        catch (error) {
-                                            setErrorLogin("Incorrect Email or Password");
-
-                                        }
-
                                     })
 
 
 
                                 }}>
-                                Confirm Login
-                                 </Button>
-                            <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Dont Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(false) }}>Sign up</Link></Typography>
-                        </form>
-
-
-
-                    </div> </div> : <div className={classes.sideContentSignup}>
-
-                    <div style={{
-                        backgroudColor: "white", color: "white", display: "flex",
-                        flexDirection: "column", justifyContent: "center", marginTop: "8%", marginleft: "20%"
-                    }}>
-
-                        <form style={{
-                            justifyContent: "center", display: "flex",
-                            flexDirection: "column", justifyContent: "center", textAlign: "center", marginleft: "20%", marginLeft: "15%", paddingBottom: "15%"
-
-                        }} noValidate autoComplete="off">
-                            <div style={{ display: "flex", flexDirection: "row" }}>
-                                <LockIcon style={{ color: "#5A75D6", justifyContent: "center", marginLeft: "30%", marginBottom: "5%" }} >SignIn</LockIcon>
-                                <Typography style={{ color: "#5A75D6", marginLeft: "1%" }}>Sign Up</Typography>
-                            </div>
-                            <Typography style={{ color: 'red', fontSize: "13px", marginLeft: "-22%" }}>{error_register}</Typography>
-                            <List>
-                                <ListItem >
-                                    <ListItemIcon><PersonIcon style={{ color: "#5A75D6" }} /> </ListItemIcon>
-                                    <TextField className={classes.inputs} id="standard-basic" onChange={handleChange2} name="name" label="Name" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><MailIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="email" type="email" label="Email" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><PhoneIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="phone_number" type="number" label="Phone Number" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><VpnKeyIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="password" type="password" label="Password" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><FingerprintIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="cnic" type="number" label="CNIC" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><InboxIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="licence" helperText="Please Enter Your Medical Licence Number" label="Licence No." />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><SchoolIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="qualification" helperText="Please Enter Your latest Medical Degree" label="Qualification" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><LocalHospitalIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    <TextField className={classes.inputs} id="filled-basic" onChange={handleChange2} name="hospital" label="Hospital/Clinic" />
-                                </ListItem>
-                                <ListItem  >
-                                    <ListItemIcon><PublicIcon style={{ color: "#5A75D6" }} /></ListItemIcon>
-                                    {/* <FormControl className={classes.formControl}>
-                                            <InputLabel id="demo-mutiple-name-label">Medical Licence Country</InputLabel>
-                                            <Select
-                                                label="Licence Country"
-                                                id="licence_country"
-                                                multiple
-                                                value={[licence_country]}
-                                                onChange={(value) => { setLicenceCountry(value.target.value); console.log("Value Selected = " + Object.keys(value.target.value)) }}
-                                                input={<Input style={{ width: 320 }} placeholder="Please Select Country Of Your Medical Licence" />}
-                                                MenuProps={MenuProps}
-                                            >
-                                                {names.map((name) => (
-                                                    <MenuItem value={name}>
-                                                        {name}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl> */}
-                                    <Select
-                                        // classes={classes}
-                                        styles={customStyles}
-                                        options={names}
-
-                                        // components={components}
-                                        // value={licence_country}
-                                        onChange={(value) => { console.log(value); setLicenceCountry(value.value); console.log(licence_country) }}
-                                    // placeholder="Search a country"
-                                    // isClearable
-
-
-                                    />
-                                </ListItem >
-
-                            </List>
-
-                            <Button style={{ marginTop: "5%", borderRadius: "25px", color: "white", backgroundImage: "linear-gradient(to right, #52A0FD, #00e2fa)", marginLeft: "22%", width: 200 }} onClick={(e) => {
-                                e.preventDefault();
-                                let result = Register();
-                                result.then((data) => {
-
-                                    if (data.auth === true) {
-                                        localStorage.setItem("token", data.token)
-                                        var token = localStorage.getItem("token")
-                                        console.log(token);
-                                        window.location.reload();
-                                        // props.history.push("/Dashboard")
-                                    }
-                                    else { setErrorRegister("Please Enter Correct Details"); }
-                                })
-
-
-
-                            }}>
-                                Confirm Signup
+                                    Confirm Signup
                                     </Button>
-                            <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Already Have Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(true) }}>Sign in</Link></Typography>
-                        </form>
+                                <Typography style={{ fontSize: 14, marginTop: "5%", marginLeft: "-12%", color: "gray" }}>Already Have Have An Account? <Link style={{ textDecoration: "none", color: "#5A75D6" }} onClick={() => { setLogin(true) }}>Sign in</Link></Typography>
+                            </form>
 
 
 
-                    </div> </div>}
+                        </div> </div>
+            }
 
 
 

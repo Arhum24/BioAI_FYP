@@ -41,7 +41,7 @@ export default function Patient(props) {
         //     try {
 
 
-        //         await fetch("https://bioai-node.herokuapp.com/api/auth/patient/patient/" + patient_id, {
+        //         await fetch("http://localhost:8000/api/auth/patient/patient/" + patient_id, {
         //             method: 'GET',
         //             headers: {
         //                 'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -68,7 +68,7 @@ export default function Patient(props) {
     };
     const [value, setValue] = React.useState(0);
     if (!localStorage.getItem("token")) { return <Redirect to='/Autherization' /> }
-    else if (!patient) { return <div className={classes.loader}><Header token={localStorage.getItem("token")} /> <CircularProgress style={{ float: "center", marginLeft: "48%" }} /><Typography style={{ float: "center" }}>Please Follow Correct Workflow<Link to="/PatientsMain">Patients</Link></Typography></div> }
+    else if (!patient) { return <div className={classes.loader}><Header token={localStorage.getItem("token")} /> <CircularProgress style={{ float: "center", color: "#37ACEB", marginLeft: "48%" }} /><Typography style={{ float: "center", marginTop: 10 }}>Please follow correct workflow<Link to="/PatientsMain">  Patients</Link></Typography></div> }
     else
         return (
             <div className={classes.container}>
@@ -78,7 +78,7 @@ export default function Patient(props) {
                     <Typography className={classes.heading}>Manage Patient</Typography>
                     <Button
                         variant="contained"
-                        style={{ backgroundColor: "#5A75D6", color: "white", fontSize: 11 }}
+                        style={{ background: "linear-gradient(to right,  #37ACEB,#38D4D7)", color: "white", fontSize: 11 }}
                         component={Link} to="/PatientsMain"
                     >
                         <ArrowBackIcon />
@@ -96,7 +96,7 @@ export default function Patient(props) {
                         <Grid item xs={7}>
                             <Paper className={classes.top_paper}>
                                 <div className={classes.root}>
-                                    <AppBar style={{ backgroundColor: "#5A75D6", color: "black" }} position="static">
+                                    <AppBar style={{ background: "linear-gradient(to right,  #37ACEB,#38D4D7)", color: "black" }} position="static">
                                         <AntTabs value={value} onChange={handleChange} aria-label="simple tabs example">
                                             <StyledTab label="Medical Info" {...a11yProps(0)} />
                                             <StyledTab label="DIagnosis" {...a11yProps(1)} />

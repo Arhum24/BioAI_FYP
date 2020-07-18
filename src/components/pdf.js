@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { RepeatOneSharp } from '@material-ui/icons';
 import moment from "moment";
+import { Link } from 'react-router-dom';
 export default class PDFShow extends Component {
     constructor(props) {
         super(props)
@@ -95,7 +96,7 @@ export default class PDFShow extends Component {
             const Pid = this.props.location.passed.Patient_ID
             const Diagnosis_ID = this.props.location.passed.Diagnosis_ID
             console.log(Pid + "    " + Diagnosis_ID + "      " + tok)
-            await fetch('https://bioai-node.herokuapp.com/api/auth/diagnose/' + Diagnosis_ID,
+            await fetch('http://localhost:8000/api/auth/diagnose/' + Diagnosis_ID,
                 {
                     method: 'GET',
                     headers: {
@@ -119,7 +120,7 @@ export default class PDFShow extends Component {
                         Symptoms: response.Symptoms
                     });
                     // Fetch Patient data
-                    fetch('https://bioai-node.herokuapp.com/api/auth/patients/' + Pid,
+                    fetch('http://localhost:8000/api/auth/patients/' + Pid,
                         {
                             method: 'GET',
                             headers: {
@@ -286,6 +287,7 @@ Diet Plan Instructions:{this.state.diet_notes}
 
                 </div>
                 <Button style={{ marginLeft: "12%" }} onClick={this.printDocument} variant="contained" color="primary"> Generate PDF </Button>
+                <Button style={{ marginLeft: "2%" }} component={Link} to="./PatientsMain" variant="contained" color="secondary"> Back </Button>
             </div>
         );
     }

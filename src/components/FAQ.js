@@ -39,10 +39,10 @@ export default function FAQs() {
                 <Header token={localStorage.getItem("token")} />
                 <div style={{
                     backgroundColor: "#5ca0f2",
-                    backgroundImage: "linear-gradient(190deg, #5A75D6 80%, #f5f7f6 100%)",
+                    backgroundImage: "linear-gradient(to right, #38D4D7, #37ACEB)",
                     height: "150px",
                     textAlign: "left"
-                }}><Typography style={{ textAlign: "left", marginLeft: "1rem", color: "white" }}>{<b style={{ color: "white" }}>BioAI</b>} is the use of Artificial Intelligence in the field of medical sciences. It was inspired by the idea to make a deployable AI
+                }}><Typography style={{ textAlign: "left", fontSize: 20, marginLeft: "1rem", color: "white" }}>{<b style={{ color: "white" }}>BioAI</b>} is the use of Artificial Intelligence in the field of medical sciences. It was inspired by the idea to make a deployable AI
              solution for the analysis of Lung Diseases through Medical Imaging.
     It was designed by the the team of three consisting of {<b>Muhammad Umair, Arhum Junaid and Ghulam Meeran</b>}
                     </Typography>

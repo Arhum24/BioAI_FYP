@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import PersonIcon from '@material-ui/icons/Person';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemLink from "./ListItemLink";
+import moment from "moment";
 const useStyles = makeStyles(theme => ({
     '@global': {
         '*::-webkit-scrollbar': {
@@ -44,7 +45,11 @@ const useStyles = makeStyles(theme => ({
         marginRight: 400,
         width: "95%",
     },
-    DetailsButton: { borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }
+    DetailsButton: {
+        borderColor: "#38D4D7", color: "#38D4D7", marginRight: "0.5rem", "&:hover": {
+            color: "#37ACEB", borderColor: "#37ACEB"
+        },
+    }
 }));
 const StyledTableRow = withStyles((theme) => ({
 
@@ -92,7 +97,7 @@ const StyledTableCell = withStyles((theme) => ({
 
     head: {
         height: 5,
-        backgroundColor: "#5A75D6",
+        backgroundColor: "#38D4D7",
 
         color: theme.palette.common.white,
         '&:nth-child(2)': {
@@ -229,10 +234,16 @@ export default function PatientList(props) {
                                         <StyledTableCell align="left" style={{
                                             minWidth: 170
                                         }} >
+                                            {row.CNIC}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="left" style={{
+                                            minWidth: 170
+                                        }} >
                                             {row.Phone_Number}
                                         </StyledTableCell>
                                         <StyledTableCell align="left" >
-                                            {new Date(row.DOB).toISOString().substring(0, 10)}
+                                            {/* {new Date(row.DOB).toISOString().substring(0, 10)} */}
+                                            {moment(row.DOB).format("DD-MM-YYYY")}
                                         </StyledTableCell>
 
                                         <StyledTableCell align="right" >
@@ -246,7 +257,7 @@ export default function PatientList(props) {
                                             {/* <Button
                                                 variant="outlined"
 
-                                                style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
+                                                style={{ borderColor: "#38D4D7", color: "#38D4D7", marginRight: "0.5rem" }}
                                                 startIcon={<EditIcon />}
                                                 component={Link} to="/Patient">
                                                 Details
@@ -269,7 +280,7 @@ export default function PatientList(props) {
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
-                style={{ marginRight: "1.8rem", color: "#3F51B5" }}
+                style={{ marginRight: "1.8rem", color: "#38D4D7" }}
             />
         </div>
 

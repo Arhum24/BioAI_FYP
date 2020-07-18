@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
         margin: 0,
         width: "100%",
     },
-    DetailsButton: { borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }
+    DetailsButton: { borderColor: "#37ACEB", color: "#37ACEB", marginRight: "0.5rem" }
 }));
 const StyledTableRow = withStyles((theme) => ({
 
@@ -105,7 +105,7 @@ const StyledTableCell = withStyles((theme) => ({
 
     head: {
         height: 5,
-        backgroundColor: "#5A75D6",
+        backgroundColor: "#37ACEB",
 
         color: theme.palette.common.white,
         '&:nth-child(2)': {
@@ -134,6 +134,8 @@ const StyledTableCell = withStyles((theme) => ({
     body: {
 
         fontSize: 14,
+
+
         '&:nth-of-type(odd)': {
 
             color: "black"
@@ -319,7 +321,7 @@ export default function DiagnosisList(props) {
 
 
             <Dialog open={openDetails} onClose={handleDetailsClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title" style={{ backgroundColor: "#5A75D6", color: "white" }}>Diagnosis Details </DialogTitle>
+                <DialogTitle id="form-dialog-title" style={{ backgroundColor: "#37ACEB", color: "white" }}>Diagnosis Details </DialogTitle>
                 <DialogContent>
                     <DialogContentText style={{ color: "black" }}>
 
@@ -328,7 +330,7 @@ export default function DiagnosisList(props) {
                     <div style={{ display: "flex", flexDirection: "column" }}>
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Symptoms:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -337,7 +339,7 @@ export default function DiagnosisList(props) {
                         </div>
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Clinical Findings:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -346,7 +348,7 @@ export default function DiagnosisList(props) {
                         </div>
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Medicines:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -355,16 +357,16 @@ export default function DiagnosisList(props) {
                         </div>
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Medication Instruction:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
-                                {diagnosis.Medicines_Notes}
+                                {diagnosis.Medicine_Notes}
                             </Typography>
                         </div>
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Recommended Foods:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -373,7 +375,7 @@ export default function DiagnosisList(props) {
                         </div >
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Preventive Foods:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -382,7 +384,7 @@ export default function DiagnosisList(props) {
                         </div >
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Diet Instruction:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -391,7 +393,7 @@ export default function DiagnosisList(props) {
                         </div >
 
                         <div style={{ display: "block", justifyContent: "left", margin: 10 }}>
-                            <h3 style={{ textAlign: "left", color: "#5A75D6" }}>
+                            <h3 style={{ textAlign: "left", color: "#37ACEB" }}>
                                 Doctor's Comments:
                            </h3>
                             <Typography style={{ display: "block", textAlign: "left" }}>
@@ -467,7 +469,7 @@ export default function DiagnosisList(props) {
                                             <Button
                                                 variant="outlined"
 
-                                                style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
+                                                style={{ borderColor: "#37ACEB", color: "#37ACEB", marginRight: "0.5rem" }}
                                                 startIcon={<EditIcon />}
                                                 onClick={() => { handleClickOpenDetails(row) }}>
                                                 Details
@@ -475,7 +477,7 @@ export default function DiagnosisList(props) {
                                             <Button
                                                 variant="outlined"
 
-                                                style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
+                                                style={{ borderColor: "#37ACEB", color: "#37ACEB", marginRight: "0.5rem" }}
                                                 startIcon={<DeleteIcon />}
                                                 onClick={() => {
                                                     setDelete(row._id);
@@ -487,7 +489,7 @@ export default function DiagnosisList(props) {
                                             {/* <Button
                                                 variant="outlined"
 
-                                                style={{ borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }}
+                                                style={{ borderColor: "#37ACEB", color: "#37ACEB", marginRight: "0.5rem" }}
                                                 startIcon={<DeleteIcon />}
                                                 onClick={() => {
                                                     setPatientID(row.Patient_ID)

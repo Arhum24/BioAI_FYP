@@ -34,6 +34,7 @@ import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import ListItemLink from './ListItemLink';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BuildIcon from '@material-ui/icons/Build';
+import FindInPageIcon from '@material-ui/icons/FindInPage';
 const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: "#5A75D6"
+    background: "linear-gradient(to right,  #37ACEB,#38D4D7)"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -134,28 +135,14 @@ const Header = (props) => {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    async function fetchData() {
 
 
-      await fetch("https://bioai-node.herokuapp.com/api/auth/userdata", {
-        method: 'GET',
-        headers: {
-          'x-access-token': token, "Access-Control-Allow-Origin": "*",
-        },
-
-      }).then((response) => response.json()).then((data) => {
-        console.log(data)
-        localStorage.setItem("profile", JSON.stringify(data))
-
-      })
-    }
-
-    fetchData();
 
   }, [])
 
-  // console.log(JSON.parse(localStorage.getItem('profile')).name);
+
+
+
 
   const [isLogin, setLogin] = React.useState(props.token);
   const classes = useStyles();
@@ -325,7 +312,11 @@ const Header = (props) => {
           <List>
             <ListItem button component={Link} to="./BioScan" key={"BioScan"} onClick={() => { handleDrawerClose() }}>
               <ListItemIcon><BuildIcon style={{ color: "white" }} /> </ListItemIcon>
-              <ListItemText style={{ color: "white" }} primary={"BioScan"} />
+              <ListItemText style={{ color: "white" }} primary={"Biopsy Scanner"} />
+            </ListItem>
+            <ListItem button component={Link} to="./DiseasePrediction" key={"DiseasePrediction"} onClick={() => { handleDrawerClose() }}>
+              <ListItemIcon><FindInPageIcon style={{ color: "white" }} /> </ListItemIcon>
+              <ListItemText style={{ color: "white" }} primary={"Disease Detector"} />
             </ListItem>
             <ListItem button component={Link} to="./Profile" key={"Profile"} onClick={() => { handleDrawerClose() }}>
               <ListItemIcon><PersonIcon style={{ color: "white" }} /></ListItemIcon>

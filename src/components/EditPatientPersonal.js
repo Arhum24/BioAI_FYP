@@ -15,6 +15,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
+
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
@@ -50,6 +51,8 @@ function EditPatientPersonal(props) {
     const [PatientEmail, setPatientEmail] = useState(email)
     console.log("toEditAddress = " + address);
     const [PatientCNIC, setPatientCNIC] = useState(cnic)
+
+
     const handleDateChange = (date) => {
         setPatientDOB(date);
     };
@@ -103,8 +106,9 @@ function EditPatientPersonal(props) {
 
     return (
         <div>
+
             <Dialog open={props.openPatientEdit} onClose={props.handleEditPatientClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title" style={{ backgroundColor: "#5A75D6", color: "white" }}>Edit Patient's Personal Information <EditIcon style={{ fontSize: "1.8em", float: "right" }} /></DialogTitle>
+                <DialogTitle id="form-dialog-title" style={{ background: "linear-gradient(to right, #38D4D7, #37ACEB)", color: "white" }}>Edit Patient's Personal Information <EditIcon style={{ fontSize: "1.8em", float: "right" }} /></DialogTitle>
                 <DialogContent>
                     <DialogContentText style={{ color: "black" }}>
 
@@ -179,11 +183,11 @@ function EditPatientPersonal(props) {
                         </MuiPickersUtilsProvider>
                         <div sytle={{ marginTop: "4em" }}>
                             <FormControl component="fieldset">
-                                <FormLabel component="legend">Gender</FormLabel>
+                                <FormLabel component="legend" color="#37ACEB">Gender</FormLabel>
                                 <RadioGroup aria-label="gender" name="gender" value={PatientGender} onChange={handleGenderChange}>
-                                    <FormControlLabel value="Female" control={<Radio style={{ color: "#5A75D6" }} />} label="Female" />
-                                    <FormControlLabel value="Male" control={<Radio style={{ color: "#5A75D6" }} />} label="Male" />
-                                    <FormControlLabel value="Other" control={<Radio style={{ color: "#5A75D6" }} />} label="Other" />
+                                    <FormControlLabel value="Female" control={<Radio style={{ color: "#37ACEB" }} />} label="Female" />
+                                    <FormControlLabel value="Male" control={<Radio style={{ color: "#37ACEB" }} />} label="Male" />
+                                    <FormControlLabel value="Other" control={<Radio style={{ color: "#37ACEB" }} />} label="Other" />
 
                                 </RadioGroup>
                             </FormControl></div>
@@ -198,6 +202,7 @@ function EditPatientPersonal(props) {
                         name="address"
                         type="text"
                         fullWidth
+                        multiline
                         value={PatientAddress}
                         onChange={handleInputChange}
                     />
@@ -206,7 +211,7 @@ function EditPatientPersonal(props) {
                     <Button onClick={props.handlePatientEditClose} color="secondary">
                         Cancel
                      </Button>
-                    <Button onClick={confirm} style={{ color: "#5A75D6" }}>
+                    <Button onClick={confirm} style={{ color: "#37ACEB" }}>
                         Confirm Change
         </Button>
                 </DialogActions>

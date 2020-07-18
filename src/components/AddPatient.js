@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom'
 import DateFnsUtils from '@date-io/date-fns';
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
+
+// import { Message, Form } from "semantic-ui-react";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -25,6 +27,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Banner from "react-js-banner";
 import Header from './Header';
 import { Redirect } from "react-router-dom";
+import { Message } from 'shineout'
 export default function AddPatient(props) {
 
   const profile = JSON.parse(localStorage.getItem('profile'));
@@ -50,6 +53,9 @@ export default function AddPatient(props) {
   const [Phone_Number, setPhoneNumber] = React.useState("");
   const [Address, setAddress] = React.useState("");
   const [DOB, setDOB] = React.useState(new Date());
+  const [success, setSuccess] = React.useState(false);
+  const [failure, setFailure] = React.useState(false);
+  const [failureMessage, setFailureMessage] = React.useState("");
 
 
 
@@ -57,11 +63,11 @@ export default function AddPatient(props) {
 
   const materialTheme = createMuiTheme({
     overrides: {
-      MuiIconButton: { root: { color: "#5A75D6" }, input: { color: "#5A75D6" } },
+      MuiIconButton: { root: { color: "#37ACEB" }, input: { color: "#37ACEB" } },
       MuiInputBase: { input: { color: "black" } },
       MuiPickersToolbar: {
         toolbar: {
-          backgroundColor: "#5A75D6",
+          backgroundColor: "#37ACEB",
         },
       },
       MuiPickersCalendarHeader: {
@@ -75,7 +81,7 @@ export default function AddPatient(props) {
 
         MuiPickersModal: {
           dialogAction: {
-            color: "#5A75D6",
+            color: "#37ACEB",
           },
         },
       },
@@ -109,45 +115,63 @@ export default function AddPatient(props) {
 
     async function postPatient() {
 
-      let result = "";
-      try {
-        await fetch("https://bioai-node.herokuapp.com/api/auth/patient", {
-          method: 'POST',
+      if (Email === "" || Name === "" || Gender === "" || CNIC === "" || DOB === "" || Phone_Number == "" || Address === "") {
+        setFailureMessage("Please Enter All Required Fields");
+        setFailure(true);
 
-          body: new URLSearchParams({
-            'Doctor_ID': Doctor_ID,
-            'Name': Name,
-            // 'LastName': LastName,
-            'Height': Height,
-            'Weight': Weight,
-            'Pulse': Pulse,
-            'Blood_Pressure': BloodPressure,
-            'Blood_Group': BloodGroup,
-            'Allergies': Allergies,
-            'Operation': Operation,
-            'Gender': Gender,
-            'Email': Email,
-            'CNIC': CNIC,
-            'Phone_Number': Phone_Number,
-            'Address': Address,
-            'DOB': DOB,
-            'Comorbidity': Comorbidity,
-            'Martial_Staus': MartialStatus
+      }
+      else {
 
-          }),
-          headers: {
-            'x-access-token': token, "Access-Control-Allow-Origin": "*",
-          },
+        let result = "";
+        try {
+          await fetch("http://localhost:8000/api/auth/patient", {
+            method: 'POST',
 
-        }).then((response) => response.json()).then((data) => {
-          result = data
+            body: new URLSearchParams({
+              'Doctor_ID': Doctor_ID,
+              'Name': Name,
+              // 'LastName': LastName,
+              'Height': Height,
+              'Weight': Weight,
+              'Pulse': Pulse,
+              'Blood_Pressure': BloodPressure,
+              'Blood_Group': BloodGroup,
+              'Allergies': Allergies,
+              'Operation': Operation,
+              'Gender': Gender,
+              'Email': Email,
+              'CNIC': CNIC,
+              'Phone_Number': Phone_Number,
+              'Address': Address,
+              'DOB': DOB,
+              'Comorbidity': Comorbidity,
+              'Maritial_Status': MartialStatus
 
-        })
-        return result
+            }),
+            headers: {
+              'x-access-token': token, "Access-Control-Allow-Origin": "*",
+            },
 
-      } catch (err) {
+          }).then((response) => response.json()).then((data) => {
+            result = data
+            console.log("Patient Result", data)
+            if (!data.error) {
 
-        return result = { auth: false }
+              setSuccess(true);
+            }
+            else { setFailureMessage("Patient with similar CNIC already exists"); setFailure(true) }
+
+            // alert("Succesful Operation")
+
+          })
+          return result
+
+        } catch (err) {
+          setFailureMessage("Server Error"); setFailure(true)
+
+
+          return result = { auth: false }
+        }
       }
     }
 
@@ -173,6 +197,8 @@ export default function AddPatient(props) {
 
   };
   const handleChange = event => {
+    if (failure)
+      setFailure(false);
 
     switch (event.target.name) {
       case "name":
@@ -194,6 +220,7 @@ export default function AddPatient(props) {
       case "gender":
         setGender(event.target.value); return;
       case "martial_status":
+
         setMartialStatus(event.target.value); return;
       case "cnic":
         setCNIC(event.target.value); return;
@@ -208,8 +235,8 @@ export default function AddPatient(props) {
     chip: {
       color: "white",
 
-      backgroundColor: "#5A75D6",
-      borderColor: "#5A75D6",
+      backgroundColor: "#37ACEB",
+      borderColor: "#37ACEB",
       '&:hover': {
         background: "white",
         color: "black",
@@ -227,18 +254,42 @@ export default function AddPatient(props) {
     return (
 
       <div className={classes.container}>
+
+        {
+        }
+
         <Header token={localStorage.getItem("token")} />
         <div className={classes.upperTop}>
           <Typography className={classes.heading}>Add New Patient</Typography>
           <Button
             variant="contained"
-            style={{ backgroundColor: "#5A75D6", color: "white", fontSize: 11 }}
+            style={{ backgroundColor: "#37ACEB", color: "white", fontSize: 11 }}
             component={Link} to="/PatientsMain"
           >
             <ArrowBackIcon />
           Back to Patient List
         </Button>
+
         </div>
+        {/* {success ? <div style={{ marginLeft: 50, width: "91%" }}><Message
+          positive
+          header="Success"
+          content="Patient has been added successfully"
+        /> </div> : failure && <div style={{ marginLeft: 50, width: "91%" }}><Message
+          negative
+          header="Warning"
+          content={failureMessage}
+        /></div>} */}
+
+        {success ? Message.success(<div style={{ width: 240 }}>Patient Added Successfully</div>, 4, {
+          position: "bottom-right",
+          title: 'Sucessfully Added',
+          onClose: () => { setSuccess(false); }
+        }) : failure && Message.warn(<div style={{ width: 240 }}>{failureMessage}</div>, 0, {
+          position: "bottom-right",
+          title: 'Error',
+          onClose: () => { setFailure(false); setFailureMessage("") }
+        })}
         <Grid container spacing={2}>
           <Grid item xs={11}>
             <Paper className={classes.top_paper}>
@@ -247,7 +298,7 @@ export default function AddPatient(props) {
                 css={{
                   textAlign: "left",
                   alignSelf: "stretch",
-                  backgroundColor: "#5A75D6",
+                  backgroundColor: "#37ACEB",
                   color: "white",
                   justifyContent: "left",
                   width: "100%"
@@ -262,8 +313,12 @@ export default function AddPatient(props) {
                     name="name"
                     className={classes.inputs}
                     onChange={handleChange}
+                    required
+                    style={{ fontSize: 15 }}
+
                   // placeholder="Name"
                   />
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </div>
 
                 <FormControl className={classes.formControl}>
@@ -285,7 +340,9 @@ export default function AddPatient(props) {
                     <MenuItem value={"Male"}>Male</MenuItem>
                     <MenuItem value={"Female"}>Female</MenuItem>
                   </Select>
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </FormControl>
+
               </div>
               <div className={classes.holders_outer}>
                 <div className={classes.holders_inner}>
@@ -295,8 +352,10 @@ export default function AddPatient(props) {
                     name="cnic"
                     className={classes.inputs}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Name"
                   />
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </div>
                 <div className={classes.holders_inner}>
                   <Typography className={classes.labels}>Email:</Typography>
@@ -305,8 +364,10 @@ export default function AddPatient(props) {
                     name="email"
                     className={classes.inputs}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Name"
                   />
+                  {/* <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p> */}
                 </div>
 
 
@@ -340,7 +401,9 @@ export default function AddPatient(props) {
                         />
                       </ThemeProvider>
                     </Grid>
+
                   </MuiPickersUtilsProvider>
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 16, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </div>
                 <div className={classes.holders_inner}>
                   <Typography className={classes.labels}>
@@ -351,8 +414,10 @@ export default function AddPatient(props) {
                     name="phone_number"
                     className={classes.inputs_select2}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Address"
                   />
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </div>
               </div>
               <div className={classes.holders_outer}>
@@ -378,6 +443,7 @@ export default function AddPatient(props) {
                     <MenuItem value={"Married"}>Married</MenuItem>
                     <MenuItem value={"Divorced"}>Divorced</MenuItem>
                   </Select>
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 2, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </div>
                 <div className={classes.holders_inner}>
                   <Typography className={classes.labels}>Address:</Typography>
@@ -392,6 +458,7 @@ export default function AddPatient(props) {
                     className={classes.inputs_long}
                     onChange={handleChange}
                   />
+                  <p style={{ fontSize: 10, textAlign: "left", marginTop: 16, fontWeight: 'bold', color: "gray" }}>*Required</p>
                 </div>
               </div>
 
@@ -400,7 +467,7 @@ export default function AddPatient(props) {
                 css={{
                   textAlign: "left",
                   alignSelf: "stretch",
-                  backgroundColor: "#5A75D6",
+                  backgroundColor: "#37ACEB",
                   color: "white",
                   justifyContent: "left",
                   width: "100%",
@@ -415,6 +482,7 @@ export default function AddPatient(props) {
                     name="height"
                     className={classes.inputs}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Age"
                   />
                 </div>
@@ -425,6 +493,7 @@ export default function AddPatient(props) {
                     name="weight"
                     className={classes.inputs}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Address"
                   />
                 </div>
@@ -465,6 +534,7 @@ export default function AddPatient(props) {
                     name="blood_pressure"
                     className={classes.inputs}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Address"
                   />
                 </div>
@@ -479,6 +549,7 @@ export default function AddPatient(props) {
                     name="pulse"
                     className={classes.inputs_last}
                     onChange={handleChange}
+                    style={{ fontSize: 15 }}
                   // placeholder="Address"
                   />
                 </div>
@@ -497,6 +568,7 @@ export default function AddPatient(props) {
                     onDelete={(chips, index) => handleDeleteAllergiesChip(chips, index)}
                     fullWidth
                     variant="outlined"
+                    placeholder="Type and Press Enter to add Chip ...."
                   // className={classes.inputs_last}
                   />
                 </div>
@@ -510,6 +582,7 @@ export default function AddPatient(props) {
                     onDelete={(chips, index) => handleDeleteOperationsChip(chips, index)}
                     fullWidth
                     variant="outlined"
+                    placeholder="Type and Press Enter to add Chip ...."
                   // className={classes.inputs_last}
                   />
                 </div>
@@ -524,6 +597,7 @@ export default function AddPatient(props) {
                     onDelete={(chips, index) => handleDeleteComorbidityChip(chips, index)}
                     fullWidth
                     variant="outlined"
+                    placeholder="Type and Press Enter to add Chip ...."
                   // className={classes.inputs_last}
                   />
                 </div>
@@ -537,7 +611,7 @@ export default function AddPatient(props) {
                 <div style={{}}>
                   <Button
                     variant="contained"
-                    style={{ backgroundColor: "#5A75D6", color: "white", fontSize: 13, marginRight: "1.5em" }}
+                    style={{ backgroundColor: "#37ACEB", color: "white", fontSize: 13, marginRight: "1.5em" }}
                     component={Link} to="/PatientsMain"
                   >
 
@@ -549,16 +623,6 @@ export default function AddPatient(props) {
                     onClick={(e) => {
                       e.preventDefault();
                       let result = InsertAPI();
-                      result.then((data) => {
-
-                        if (data.auth === true) {
-                          alert("Data " + data)
-                        }
-                        else { console.log(data) }
-                      })
-
-
-
                     }}
                   >
                     Confirm
@@ -588,7 +652,7 @@ const useStyles = makeStyles(theme => ({
   },
   holders_inner: { display: "block", margin: 10, justifyContent: "left" },
   holders_inner_last: { display: "block", margin: 10, justifyContent: "left", width: "9900%" },
-  labels: { fontWeight: "bold", marginBottom: 15, fontSize: 13, textAlign: "left", color: "#5A75D6" },
+  labels: { fontWeight: "bold", marginBottom: 15, fontSize: 13, textAlign: "left", color: "#37ACEB" },
   inputs: {
     width: 800, margin: 0, height: 40,
     [theme.breakpoints.down('lg')]: {
@@ -648,7 +712,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 5,
     fontSize: 15,
     marginBottom: 5,
-    color: "#5A75D6",
+    color: "gray",
     textAlign: "left"
 
   },

@@ -1,0 +1,14 @@
+
+import Banner from "react-js-banner";
+
+ <Banner
+                title="Personal Information"
+                css={{
+                  textAlign: "left",
+                  alignSelf: "stretch",
+                  backgroundColor: "#37ACEB",
+                  color: "white",
+                  justifyContent: "left",
+                  width: "100%"
+                }}
+              />

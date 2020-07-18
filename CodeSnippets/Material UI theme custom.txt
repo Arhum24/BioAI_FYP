@@ -1,0 +1,31 @@
+
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+
+
+  const materialTheme = createMuiTheme({
+    overrides: {
+      MuiIconButton: { root: { color: "#37ACEB" }, input: { color: "#37ACEB" } },
+      MuiInputBase: { input: { color: "black" } },
+      MuiPickersToolbar: {
+        toolbar: {
+          backgroundColor: "#37ACEB",
+        },
+      },
+      MuiPickersCalendarHeader: {
+        switchHeader: {
+          // backgroundColor: lightBlue.A200,
+          // color: "white",
+        },
+      },
+      MuiPickersDay: {
+
+
+        MuiPickersModal: {
+          dialogAction: {
+            color: "#37ACEB",
+          },
+        },
+      },
+    }
+  });

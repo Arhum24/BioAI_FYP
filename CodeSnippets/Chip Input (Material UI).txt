@@ -1,0 +1,41 @@
+
+import ChipInput from "material-ui-chip-input";
+
+
+  const handleAddChip = chips_ => {
+   //Do Something
+  };
+
+
+  const handleDeleteChip = (chips_, index) => {
+//Do something
+
+  };
+
+//Style Custom Chip
+  const StyledChipInput = withStyles((theme) => ({
+    chip: {
+      color: "white",
+
+      backgroundColor: "#37ACEB",
+      borderColor: "#37ACEB",
+      '&:hover': {
+        background: "white",
+        color: "black",
+        border: "1px black",
+      },
+    },
+  }))(ChipInput);
+
+
+
+ </Typography>
+                  <StyledChipInput
+                    value={value}
+                    onAdd={chips => handleAddChip(chips)}
+                    onDelete={(chips, index) => handleDeleteChip(chips, index)}
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Type and Press Enter to add Chip ...."
+                  
+                  />

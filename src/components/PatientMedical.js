@@ -62,7 +62,7 @@ const MedicalInfor = (props) => {
             let token = localStorage.getItem("token");
             let result = "";
             try {
-                await fetch("http://localhost:8000/api/auth/patient/" + patient._id, {
+                await fetch("https://bioai-node.herokuapp.com/api/auth/patient/" + patient._id, {
                     method: 'PUT',
 
                     body: new URLSearchParams({

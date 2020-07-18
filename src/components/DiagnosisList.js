@@ -224,7 +224,7 @@ export default function DiagnosisList(props) {
 
             let result = "";
             try {
-                await fetch("http://localhost:8000/api/auth/diagnosis/" + toDelete, {
+                await fetch("https://bioai-node.herokuapp.com/api/auth/diagnosis/" + toDelete, {
                     method: 'DELETE',
 
 

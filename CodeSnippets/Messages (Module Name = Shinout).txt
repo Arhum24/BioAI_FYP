@@ -1,0 +1,19 @@
+import { Message } from 'shineout'
+
+
+  const [success, setSuccess] = React.useState(false);
+  const [failure, setFailure] = React.useState(false);
+  const [failureMessage, setFailureMessage] = React.useState("");
+
+
+//Conditional Rendering
+
+
+
+   {success ? Message.success(<div style={{ width: 240 }}>Patient Added Successfully</div>, 8, {
+          position: "bottom-right",
+          title: 'Sucessfully Added',
+        }) : failure && Message.warn(<div style={{ width: 240 }}>{failureMessage}</div>, 0, {
+          position: "bottom-right",
+          title: 'Error',
+        })}

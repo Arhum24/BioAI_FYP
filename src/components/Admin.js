@@ -1,4 +1,3 @@
-
 import {
     Table,
     TableBody,
@@ -97,7 +96,7 @@ const useStyles = makeStyles(theme => ({
         marginLeft: "2%",
         // marginRight: "5%",
         width: "95%",
-        backgroundColor: "#2F3136",
+        // backgroundColor: "#2F3136",
     },
     DetailsButton: { borderColor: "#5A75D6", color: "#5A75D6", marginRight: "0.5rem" }
     , inputs: { width: 320 },
@@ -238,7 +237,10 @@ export default function Admin(props) {
     let [error_login, setErrorLogin] = React.useState("");
     const [email_login, setEmailLogin] = React.useState("");
     const [password_login, setPasswordLogin] = React.useState("");
-    const [forceUpdate, setForceUpdate] = React.useState(0)
+    const [forceUpdate, setForceUpdate] = React.useState(0);
+    const [word, setWord] = useState("");
+    const [data, setData] = useState([]);
+
 
 
     async function Login() {
@@ -246,7 +248,7 @@ export default function Admin(props) {
 
         let result = "";
         try {
-            result = await fetch("https://bioai-node.herokuapp.com/api/Admin/login", {
+            result = await fetch("http://localhost:8000/api/Admin/login", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -280,10 +282,11 @@ export default function Admin(props) {
     };
     const fetchData = async () => {
         const result = await axios(
-            'https://bioai-node.herokuapp.com/api/Admin/DoctorList',
+            'http://localhost:8000/api/Admin/DoctorList',
         );
 
         setRows(result.data);
+        setData(result.data);
     };
 
     useEffect(() => {
@@ -303,10 +306,31 @@ export default function Admin(props) {
 
 
     }
+
+    const handleFilter = (e) => {
+
+        setWord(e.target.value);
+        let newList = []
+        if (word !== "") {
+
+            newList = data.filter(item =>
+                item.name.toLowerCase().trim().includes(word.toLowerCase().trim()))
+            console.log("Filtered ", newList)
+            setRows(newList)
+
+        } else {
+
+            setRows(data);
+        }
+
+
+    }
+
+
     const BlockDoctor = async (id, value) => {
 
         const token = localStorage.getItem("token");
-        await fetch("https://bioai-node.herokuapp.com/api/Admin/Doctor/Block", {
+        await fetch("http://localhost:8000/api/Admin/Doctor/Block", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -329,7 +353,7 @@ export default function Admin(props) {
 
         console.log(value)
         const token = localStorage.getItem("token");
-        await fetch("https://bioai-node.herokuapp.com/api/Admin//Doctor/Verify", {
+        await fetch("http://localhost:8000/api/Admin//Doctor/Verify", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -451,6 +475,8 @@ export default function Admin(props) {
             </Typography></AppBar>
 
             <Typography style={{ fontSize: "2.4em", marginTop: "2em", color: "gray", textAlign: "center", fontWeight: "bold", }}>User Management</Typography>
+            <input style={{ marginRight: "3.8rem", marginBottom: "1%", float: "right", width: 400, height: 40, borderRadius: 6, borderWidth: 0.5, borderColor: "white", marginTop: "2%" }} value={word} onChange={handleFilter} name="Search Bar" placeholder="Search by name...." />
+
             <TableContainer component={Paper} className={classes.container}>
                 <Table className={classes.root} stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -580,6 +606,13 @@ export default function Admin(props) {
                             })}
                     </TableBody>
                 </Table>
+                {(() => {
+                    if (rows.length < 1) {
+                        return (
+                            <p style={{ fontSize: 17, color: "gray", textAlign: "center", float: "center", width: "100%", marginBottom: "3%" }}>No Result Found</p>
+                        )
+                    }
+                })()}
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[10, 25, 60, 100]}
@@ -592,17 +625,5 @@ export default function Admin(props) {
                 style={{ marginRight: "1.8rem", color: "#3F51B5" }}
             />
         </div >
-
-
-
-
-
-
     );
-
-
-
-
-
-
 }

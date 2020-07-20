@@ -1,4 +1,3 @@
-
 import {
     Table,
     TableBody,
@@ -40,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     },
     container: {
         maxHeight: 750,
-        marginTop: 50,
+        marginTop: 10,
         marginLeft: 50,
         marginRight: 400,
         width: "95%",
@@ -269,8 +268,16 @@ export default function PatientList(props) {
                                     </StyledTableRow>
                                 );
                             })}
+
                     </TableBody>
                 </Table>
+                {(() => {
+                    if (props.rows.length < 1) {
+                        return (
+                            <p style={{ fontSize: 17, color: "gray", textAlign: "center", float: "center", width: "100%", marginBottom: "3%" }}>No Patient Found</p>
+                        )
+                    }
+                })()}
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[10, 25, 60, 100]}
@@ -283,17 +290,5 @@ export default function PatientList(props) {
                 style={{ marginRight: "1.8rem", color: "#38D4D7" }}
             />
         </div>
-
-
-
-
-
-
     );
-
-
-
-
-
-
 }

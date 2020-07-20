@@ -76,6 +76,8 @@ const columns = [
 function PatientsMain(props) {
     const [open, setOpen] = useState(false);
     const [forceupdate, setForceUpdate] = useState(0);
+    const [word, setWord] = useState("");
+    const [data, setData] = useState([])
     const classes = useStyles();
 
 
@@ -100,7 +102,7 @@ function PatientsMain(props) {
         const doct_id = profile._id
 
         async function fetchData() {
-            await fetch("https://bioai-node.herokuapp.com/api/auth/patient/" + doct_id, {
+            await fetch("http://localhost:8000/api/auth/patient/" + doct_id, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",
@@ -108,7 +110,8 @@ function PatientsMain(props) {
 
             }).then((response) => response.json()).then((data) => {
                 console.log(data)
-                setRows(data)
+                setRows(data);
+                setData(data);
 
             })
         }
@@ -119,6 +122,28 @@ function PatientsMain(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+
+    const handleFilter = (e) => {
+
+        setWord(e.target.value);
+        let newList = []
+        if (word !== "") {
+
+            newList = data.filter(item =>
+                item.Name.toLowerCase().trim().includes(word.toLowerCase().trim()))
+            console.log("Filtered ", newList)
+            setRows(newList)
+
+        } else {
+
+            setRows(data);
+        }
+
+
+    }
+
+
     const handleConfirm = async (patient) => {
         if (patient.name !== "") {
             const data = { PatientName: patient.PatientName }
@@ -162,6 +187,7 @@ function PatientsMain(props) {
                 {/* `/ideas/${ this.props.testValue }` */}
                 <ListItemLink to={{ pathname: "/AddPatient", passed: { name: "Umair Awan" } }} variant="contained" text="Add Patient" icon={<AddIcon />} classes={classes} className={classes.AddPatient} doctor="Umair Doctor" />
                 <Typography style={{ marginLeft: "3.5rem", textAlign: "left", fontWeight: "bold", color: "gray", fontSize: 15 }}>Patients</Typography>
+                <input style={{ marginRight: "3.5rem", marginBottom: "1%", float: "right", width: 400, height: 40, borderRadius: 6, borderWidth: 0.5, borderColor: "white", marginTop: "2%" }} value={word} onChange={handleFilter} name="Search Bar" placeholder="Search by name...." />
                 <PatientList
                     rows={rows}
                     columns={columns}

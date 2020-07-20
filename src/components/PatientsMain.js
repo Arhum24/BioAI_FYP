@@ -102,7 +102,7 @@ function PatientsMain(props) {
         const doct_id = profile._id
 
         async function fetchData() {
-            await fetch("http://localhost:8000/api/auth/patient/" + doct_id, {
+            await fetch("https://bioai-node.herokuapp.com/api/auth/patient/" + doct_id, {
                 method: 'GET',
                 headers: {
                     'x-access-token': token, "Access-Control-Allow-Origin": "*",

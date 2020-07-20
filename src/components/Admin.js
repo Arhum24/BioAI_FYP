@@ -248,7 +248,7 @@ export default function Admin(props) {
 
         let result = "";
         try {
-            result = await fetch("http://localhost:8000/api/Admin/login", {
+            result = await fetch("https://bioai-node.herokuapp.com/api/Admin/login", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -282,7 +282,7 @@ export default function Admin(props) {
     };
     const fetchData = async () => {
         const result = await axios(
-            'http://localhost:8000/api/Admin/DoctorList',
+            'https://bioai-node.herokuapp.com/api/Admin/DoctorList',
         );
 
         setRows(result.data);
@@ -330,7 +330,7 @@ export default function Admin(props) {
     const BlockDoctor = async (id, value) => {
 
         const token = localStorage.getItem("token");
-        await fetch("http://localhost:8000/api/Admin/Doctor/Block", {
+        await fetch("https://bioai-node.herokuapp.com/api/Admin/Doctor/Block", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -353,7 +353,7 @@ export default function Admin(props) {
 
         console.log(value)
         const token = localStorage.getItem("token");
-        await fetch("http://localhost:8000/api/Admin//Doctor/Verify", {
+        await fetch("https://bioai-node.herokuapp.com/api/Admin//Doctor/Verify", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
